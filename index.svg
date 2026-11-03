@@ -6,12 +6,14 @@
         <meta charset="UTF-8" />
         <title>zaka</title>
         <style type="text/css"><![CDATA[
-          html, body, iframe { width: 100%; height: 100%; margin: 0; padding: 0; border: 0; }
-          iframe { display: block; }
+          html, body, object { width: 100%; height: 100%; margin: 0; padding: 0; border: 0; }
+          object { display: block; }
         ]]></style>
       </head>
       <body>
-        <iframe src="index.xml" title="zaka"></iframe>
+        <object data="index.xml" type="application/xhtml+xml" aria-label="zaka">
+          <p><a href="index.xml">Open zaka</a></p>
+        </object>
       </body>
     </html>
   </foreignObject>
