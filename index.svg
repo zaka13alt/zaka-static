@@ -1,76 +1,78 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 800 500" preserveAspectRatio="none">
   <foreignObject width="100%" height="100%">
     <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" style="height: 100%; margin: 0;">
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>zaka</title>
-    <link rel="prefetch" href="stuff/LyzaHBeO/jCC9IUDB.wasm" as="fetch" type="application/wasm" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <meta property="og:image" content="img/screenshot-of-site.png" />
-    <link rel="preload" href="css/styles.css" as="style" />
-    <link rel="stylesheet" type="text/css" href="/css/svg-fix.css" />
-    <link rel="stylesheet" href="css/styles.css" />
-    <meta property="og:description" content="zaka v2" />
-    <meta name="author" content="zaka" />
-    <link rel="canonical" href="https://zakaon.top" />
-    <meta property="og:title" content="zaka" />
-    <meta property="og:url" content="https://zakaon.top" />
-    <meta property="og:site_name" content="zaka v2" />
-    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-7F6PMTEL54"></script>
-    <script>//<![CDATA[
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-7F6PMTEL54');
-    //]]></script>
-</head>
-<body>
-<div id="app">
-    <aside id="sidebar">
-        <button class="sidebar-btn" id="sidebar-game" title="g@mez" aria-label="g@mez">
-            <img src="img/16zx3U.svg" alt="g@mez" />
-        </button>
-        <button class="sidebar-btn" id="sidebar-a1" title="A1" aria-label="A1">
-            <img src="img/7262146-200.png" alt="A1" />
-        </button>
-        <button class="sidebar-btn" id="sidebar-chat" title="ch@t" aria-label="ch@t">
-            <img src="img/chat.svg" alt="ch@t" />
-        </button>
-        <div class="sidebar-sep"></div>
-        <button class="sidebar-btn" id="sidebar-settings" title="s3ttin7gs" aria-label="s3ttin7gs">
-            <i class="fa-solid fa-gear" style="font-size:15px;"></i>
-        </button>
-    </aside>
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>zaka</title>
+        <link rel="prefetch" href="stuff/LyzaHBeO/jCC9IUDB.wasm" as="fetch" type="application/wasm" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+        <meta property="og:image" content="img/screenshot-of-site.png" />
+        <link rel="preload" href="css/styles.css" as="style" />
+        <link rel="stylesheet" type="text/css" href="/css/svg-fix.css" />
+        <link rel="stylesheet" href="css/styles.css" />
+        <meta property="og:description" content="zaka v2" />
+        <meta name="author" content="zaka" />
+        <link rel="canonical" href="https://zakaon.top" />
+        <meta property="og:title" content="zaka" />
+        <meta property="og:url" content="https://zakaon.top" />
+        <meta property="og:site_name" content="zaka v2" />
+        <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-7F6PMTEL54"></script>
+        <script>//<![CDATA[
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-7F6PMTEL54');
+        //]]></script>
+      </head>
+      <body>
+        <div id="app">
+          <aside id="sidebar">
+            <button class="sidebar-btn" id="sidebar-game" title="g@mez" aria-label="g@mez">
+              <img src="img/16zx3U.svg" alt="g@mez" />
+            </button>
+            <button class="sidebar-btn" id="sidebar-a1" title="A1" aria-label="A1">
+              <img src="img/7262146-200.png" alt="A1" />
+            </button>
+            <button class="sidebar-btn" id="sidebar-chat" title="ch@t" aria-label="ch@t">
+              <img src="img/chat.svg" alt="ch@t" />
+            </button>
+            <div class="sidebar-sep"></div>
+            <button class="sidebar-btn" id="sidebar-settings" title="s3ttin7gs" aria-label="s3ttin7gs">
+              <i class="fa-solid fa-gear" style="font-size:15px;"></i>
+            </button>
+          </aside>
 
-    <div id="br0">
-        <div id="c9d0e">
-            <button id="u1v2w" type="button" title="k4m9p"><i class="fa-solid fa-plus"></i></button>
-        </div>
-        <form id="x3y4z">
-            <button type="button" id="d7e8f" class="a5b6c" aria-label="z3x7q"><i class="fa-solid fa-chevron-left"></i></button>
-            <button type="button" id="g9h0i" class="a5b6c" aria-label="v8n2r"><i class="fa-solid fa-chevron-right"></i></button>
-            <button type="button" id="q1r2s" class="a5b6c" aria-label="j5w4t"><i class="fa-solid fa-rotate-right"></i></button>
-            <div class="j1k2l">
+          <div id="br0">
+            <div id="c9d0e">
+              <button id="u1v2w" type="button" title="k4m9p"><i class="fa-solid fa-plus"></i></button>
+            </div>
+            <form id="x3y4z">
+              <button type="button" id="d7e8f" class="a5b6c" aria-label="z3x7q"><i class="fa-solid fa-chevron-left"></i></button>
+              <button type="button" id="g9h0i" class="a5b6c" aria-label="v8n2r"><i class="fa-solid fa-chevron-right"></i></button>
+              <button type="button" id="q1r2s" class="a5b6c" aria-label="j5w4t"><i class="fa-solid fa-rotate-right"></i></button>
+              <div class="j1k2l">
                 <span id="p5q6r"><i class="fa-solid fa-globe"></i></span>
                 <input id="t3u4v" type="text" class="m3n4o" placeholder="s3arc7 or u3l" autocomplete="off" spellcheck="false" />
-            </div>
-            <div id="s7t8u">
+              </div>
+              <div id="s7t8u">
                 <button type="button" class="v9w0x" id="w5x6y" title="b6h1s"><i class="fa-regular fa-star"></i></button>
-            </div>
-            <select id="q1r2s2"></select>
-        </form>
-        <div id="h7i8j"></div>
-    </div>
-</div>
+              </div>
+              <select id="q1r2s2"></select>
+            </form>
+            <div id="h7i8j"></div>
+          </div>
+        </div>
 
-<div class="l1-overlay" id="e28IB">
-    <div class="spinner-box">
-        <img src=".assets/spinner.svg" alt="loading" />
-        <div class="spinner-text">loading...</div>
-    </div>
-</div>
+        <div class="l1-overlay" id="e28IB">
+          <div class="spinner-box">
+            <img src=".assets/spinner.svg" alt="loading" />
+            <div class="spinner-text">loading...</div>
+          </div>
+        </div>
 
-<div class="use-count" id="use-count"><span id="use-count-n">0</span> online</div>
+      <div class="use-count" id="use-count"><span id="use-count-n">0</span> online</div>
+
 
 <script src="frame/x9K2m.js"></script>
 <script src="frame/8b3rt.js"></script>
