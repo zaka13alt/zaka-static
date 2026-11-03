@@ -1,19 +1,596 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 800 500" preserveAspectRatio="none">
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="100%" height="100%"
+     viewBox="0 0 800 500"
+     preserveAspectRatio="none">
   <foreignObject width="100%" height="100%">
     <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" style="width:100%;height:100%;margin:0;padding:0">
       <head>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>zaka</title>
-        <style type="text/css"><![CDATA[
-          html, body, object { width: 100%; height: 100%; margin: 0; padding: 0; border: 0; }
-          object { display: block; }
+
+        <link rel="prefetch" href="stuff/LyzaHBeO/jCC9IUDB.wasm" as="fetch" type="application/wasm" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+        <meta property="og:image" content="img/screenshot-of-site.png" />
+        <link rel="preload" href="css/styles.css" as="style" />
+        <link rel="stylesheet" href="css/styles.css" />
+        <link rel="stylesheet" href="/css/svg-fix.css" />
+        <meta property="og:description" content="zaka v2" />
+        <meta name="author" content="zaka" />
+        <link rel="canonical" href="https://zakaon.top" />
+        <meta property="og:title" content="zaka" />
+        <meta property="og:url" content="https://zakaon.top" />
+        <meta property="og:site_name" content="zaka v2" />
+        <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-7F6PMTEL54"></script>
+        <script><![CDATA[
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7F6PMTEL54');
+        ]]></script>
+
+        <style><![CDATA[
+          html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+
+          body {
+            overflow: hidden;
+            background: #000;
+            color: #fff;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+          }
+
+          #app {
+            width: 100%;
+            height: 100%;
+            display: flex;
+          }
+
+          #sidebar {
+            width: 58px;
+            min-width: 58px;
+            background: rgba(20, 20, 22, 0.95);
+            border-right: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 10px;
+            gap: 10px;
+          }
+
+          .sidebar-btn {
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            cursor: pointer;
+          }
+
+          .sidebar-btn img {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            display: block;
+          }
+
+          .sidebar-sep {
+            width: 26px;
+            height: 1px;
+            background: rgba(255,255,255,0.12);
+            margin: 8px 0;
+          }
+
+          #br0 {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+          }
+
+          #c9d0e {
+            height: 44px;
+            display: flex;
+            align-items: center;
+            padding: 8px 8px 0 8px;
+            gap: 6px;
+            background: rgba(0,0,0,0.28);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+          }
+
+          #u1v2w {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            color: #fff;
+            cursor: pointer;
+          }
+
+          #x3y4z {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: rgba(0,0,0,0.22);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+          }
+
+          .a5b6c {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            color: #fff;
+            cursor: pointer;
+          }
+
+          .j1k2l {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            min-width: 0;
+            height: 34px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.09);
+            background: rgba(255,255,255,0.02);
+            overflow: hidden;
+          }
+
+          #p5q6r {
+            width: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ddd;
+          }
+
+          .m3n4o {
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #fff;
+            padding: 0 10px 0 0;
+            font: inherit;
+          }
+
+          #s7t8u {
+            width: 30px;
+            display: flex;
+            justify-content: center;
+          }
+
+          .v9w0x {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            color: #fff;
+            cursor: pointer;
+          }
+
+          #q1r2s2 {
+            width: 160px;
+            height: 30px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.02);
+            color: #fff;
+          }
+
+          #h7i8j {
+            position: relative;
+            flex: 1;
+            min-height: 0;
+            background: rgba(0,0,0,0.18);
+          }
+
+          .l1-overlay {
+            position: absolute;
+            inset: 0;
+            display: none;
+            place-items: center;
+            background: rgba(0,0,0,0.28);
+            z-index: 1000;
+          }
+
+          .l1-overlay.active {
+            display: grid;
+          }
+
+          .spinner-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            font-size: 13px;
+            opacity: 0.9;
+          }
+
+          .spinner-box img {
+            width: 32px;
+            height: 32px;
+            display: block;
+          }
+
+          .use-count {
+            position: absolute;
+            right: 14px;
+            bottom: 12px;
+            background: rgba(0,0,0,0.45);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 999px;
+            padding: 5px 10px;
+            font-size: 12px;
+            color: #ddd;
+            z-index: 10;
+          }
+
+          .use-count.on {
+            color: #a7f3d0;
+          }
+
+          .f1g2h {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px 6px 8px;
+            border-radius: 8px 8px 0 0;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: #dfe5ec;
+            min-width: 0;
+            cursor: pointer;
+            max-width: 180px;
+          }
+
+          .f1g2h.i3j4k {
+            background: rgba(255,255,255,0.08);
+          }
+
+          .o7p8q {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 12px;
+          }
+
+          .r9s0t {
+            width: 18px;
+            height: 18px;
+            border: none;
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .k9l0m {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: none;
+            background: #000;
+          }
+
+          .n1o2p {
+            display: block;
+          }
+
+          .q3r4s {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(14,14,16,0.9), rgba(0,0,0,0.95));
+          }
+
+          .t5u6v {
+            width: 220px;
+            height: 60px;
+          }
+
+          .w7x8y {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(90px, 1fr));
+            gap: 12px;
+            width: min(720px, 72%);
+            margin-top: 16px;
+          }
+
+          .z9a0b {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.02);
+            color: #f3f5f7;
+            cursor: pointer;
+          }
+
+          .c1d2e {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.04);
+          }
+
+          .c1d2e img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+          }
+
+          .f3g4h {
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .discord-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 18px;
+            width: fit-content;
+            color: #fff;
+            text-decoration: none;
+            opacity: 0.9;
+          }
+
+          .discord-link img {
+            width: 18px;
+            height: 18px;
+          }
         ]]></style>
       </head>
+
       <body>
-        <object data="index.xml" type="application/xhtml+xml" aria-label="zaka">
-          <p><a href="index.xml">Open zaka</a></p>
-        </object>
+        <div id="app">
+          <aside id="sidebar">
+            <button class="sidebar-btn" id="sidebar-game" title="g@mez" aria-label="g@mez">
+              <img src="img/16zx3U.svg" alt="g@mez" />
+            </button>
+            <button class="sidebar-btn" id="sidebar-a1" title="A1" aria-label="A1">
+              <img src="img/7262146-200.png" alt="A1" />
+            </button>
+            <button class="sidebar-btn" id="sidebar-chat" title="ch@t" aria-label="ch@t">
+              <img src="img/chat.svg" alt="ch@t" />
+            </button>
+
+            <div class="sidebar-sep"></div>
+
+            <button class="sidebar-btn" id="sidebar-settings" title="s3ttin7gs" aria-label="s3ttin7gs">
+              <i class="fa-solid fa-gear" style="font-size:15px;"></i>
+            </button>
+          </aside>
+
+          <div id="br0">
+            <div id="c9d0e">
+              <button id="u1v2w" type="button" title="k4m9p"><i class="fa-solid fa-plus"></i></button>
+            </div>
+
+            <form id="x3y4z">
+              <button type="button" id="d7e8f" class="a5b6c" aria-label="z3x7q"><i class="fa-solid fa-chevron-left"></i></button>
+              <button type="button" id="g9h0i" class="a5b6c" aria-label="v8n2r"><i class="fa-solid fa-chevron-right"></i></button>
+              <button type="button" id="q1r2s" class="a5b6c" aria-label="j5w4t"><i class="fa-solid fa-rotate-right"></i></button>
+
+              <div class="j1k2l">
+                <span id="p5q6r"><i class="fa-solid fa-globe"></i></span>
+                <input id="t3u4v" type="text" class="m3n4o" placeholder="s3arc7 or u3l" autocomplete="off" spellcheck="false" />
+              </div>
+
+              <div id="s7t8u">
+                <button type="button" class="v9w0x" id="w5x6y" title="b6h1s"><i class="fa-regular fa-star"></i></button>
+              </div>
+
+              <select id="q1r2s2"></select>
+            </form>
+
+            <div id="h7i8j"></div>
+          </div>
+        </div>
+
+        <div class="l1-overlay" id="e28IB">
+          <div class="spinner-box">
+            <img src=".assets/spinner.svg" alt="loading" />
+            <div class="spinner-text">loading...</div>
+          </div>
+        </div>
+
+        <div class="use-count" id="use-count"><span id="use-count-n">0</span> online</div>
+
+        <script src="frame/x9K2m.js"></script>
+        <script src="frame/8b3rt.js"></script>
+        <script src="frame/pGJxh.js"></script>
+        <script src="stuff/LyzaHBeO/hdr6ZzzC.js"></script>
+        <script src="stuff/LyzaHBeO/msJpa98j.js"></script>
+        <script src=".assets/index-k9v3f1.js"></script>
+        <script src=".assets/index-v8c4z2.js"></script>
+
+        <script><![CDATA[
+          (function () {
+            "use strict";
+
+            var BASE = new URL("./", location.href).pathname;
+            var useBase = "";
+            var chatBase = "";
+            var chosenWisp = "";
+            var npBase = "";
+            var defaultWisp = "wss://" + window.location.host + "/api/";
+            var defaultSearch = "https://duckduckgo.com/search?q=%s";
+            var storageShortcuts = "zaka13_shortcuts_v3";
+            var storageWisp = "zaka13_w1sp_server";
+            var storageSearch = "zaka13_search_engine";
+            var storageBackend = "zaka13_backend";
+
+            var tabs = new Map();
+            var activeTabId = null;
+            var tabCounter = 0;
+
+            var w1spServer = localStorage.getItem(storageWisp) || defaultWisp;
+            var searchEngine = localStorage.getItem(storageSearch) || defaultSearch;
+            if (searchEngine.indexOf("%s") < 0) searchEngine = defaultSearch;
+            var backendMode = localStorage.getItem(storageBackend) || "default";
+
+            function createTab() {
+              var id = ++tabCounter;
+              var tabEl = document.createElement("div");
+              tabEl.className = "f1g2h";
+
+              var title = document.createElement("span");
+              title.className = "o7p8q";
+              title.textContent = "n3w t3b";
+              tabEl.appendChild(title);
+
+              var closeBtn = document.createElement("button");
+              closeBtn.className = "r9s0t";
+              closeBtn.innerHTML = "<i class=\"fa-solid fa-xmark\"></i>";
+              tabEl.appendChild(closeBtn);
+
+              var iframe = document.createElement("iframe");
+              iframe.className = "k9l0m";
+              iframe.setAttribute("sandbox", "allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-downloads allow-pointer-lock allow-storage-access-by-user-activation");
+
+              var newTabPage = document.createElement("div");
+              newTabPage.className = "q3r4s";
+
+              var svgNS = "http://www.w3.org/2000/svg";
+              var svg = document.createElementNS(svgNS, "svg");
+              svg.setAttribute("class", "t5u6v");
+              svg.setAttribute("viewBox", "0 0 60 20");
+
+              var rect = document.createElementNS(svgNS, "rect");
+              rect.setAttribute("width", "100%");
+              rect.setAttribute("height", "100%");
+              rect.setAttribute("fill", "#000");
+              rect.setAttribute("rx", "4");
+
+              var text = document.createElementNS(svgNS, "text");
+              text.setAttribute("x", "50%");
+              text.setAttribute("y", "55%");
+              text.setAttribute("fill", "#fff");
+              text.setAttribute("font-family", "system-ui,sans-serif");
+              text.setAttribute("font-size", "12");
+              text.setAttribute("font-weight", "600");
+              text.setAttribute("text-anchor", "middle");
+              text.setAttribute("dominant-baseline", "middle");
+              text.setAttribute("letter-spacing", "0.5");
+              text.textContent = "zaka";
+
+              svg.appendChild(rect);
+              svg.appendChild(text);
+              newTabPage.appendChild(svg);
+
+              document.getElementById("c9d0e").insertBefore(tabEl, document.getElementById("u1v2w"));
+              document.getElementById("h7i8j").appendChild(iframe);
+              document.getElementById("h7i8j").appendChild(newTabPage);
+
+              var tab = {
+                id: id,
+                tab: tabEl,
+                iframe: iframe,
+                title: title,
+                url: "",
+                newTabPage: newTabPage,
+                settingsPage: null,
+                frame: null,
+                w1sp: w1spServer,
+                isA1: false,
+                faviconImg: null,
+                isYT: false,
+                lastUrl: ""
+              };
+
+              tabs.set(id, tab);
+              activateTab(id);
+
+              return id;
+            }
+
+            function activateTab(id) {
+              var tab = tabs.get(id);
+              if (!tab) return;
+
+              tabs.forEach(function (t) {
+                t.tab.classList.remove("i3j4k");
+                t.iframe.classList.remove("n1o2p");
+                if (t.newTabPage) t.newTabPage.style.display = "none";
+                if (t.settingsPage) t.settingsPage.classList.remove("n1o2p");
+              });
+
+              tab.tab.classList.add("i3j4k");
+              activeTabId = id;
+
+              if (tab.url) {
+                tab.iframe.classList.add("n1o2p");
+                document.getElementById("t3u4v").value = tab.url;
+              } else {
+                if (tab.newTabPage) tab.newTabPage.style.display = "flex";
+                document.getElementById("t3u4v").value = "";
+              }
+            }
+
+            document.getElementById("u1v2w").onclick = function () {
+              createTab();
+            };
+
+            document.getElementById("sidebar-game").onclick = function () {
+              var id = createTab();
+              var t = tabs.get(id);
+              if (t) {
+                t.url = "/g";
+                t.title.textContent = "g@mez";
+                document.getElementById("t3u4v").value = "/g";
+                activateTab(id);
+              }
+            };
+
+            document.getElementById("sidebar-chat").onclick = function () {
+              var id = createTab();
+              var t = tabs.get(id);
+              if (t) {
+                t.url = "/chat";
+                t.title.textContent = "ch@t";
+                document.getElementById("t3u4v").value = "/chat";
+                activateTab(id);
+              }
+            };
+
+            createTab();
+          })();
+        ]]></script>
       </body>
     </html>
   </foreignObject>
