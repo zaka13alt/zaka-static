@@ -1,0 +1,22 @@
+/* Ensure the root HTML container within the foreignObject fills the space */
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Strip default margins/paddings from body and ensure it matches the container size */
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Optional helper to ensure your inner content stretches as well */
+.content-box {
+  width: 100%;
+  height: 100%;
+}
