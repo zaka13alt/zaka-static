@@ -52,6 +52,7 @@
             <div class="j1k2l">
                 <span id="p5q6r"><i class="fa-solid fa-globe"></i></span>
                 <input id="t3u4v" type="text" class="m3n4o" placeholder="s3arc7 or u3l" autocomplete="off" spellcheck="false">
+                <div id="f4g5h"></div>
             </div>
             <div id="s7t8u">
                 <button type="button" class="v9w0x" id="w5x6y" title="b6h1s"><i class="fa-regular fa-star"></i></button>
@@ -86,7 +87,7 @@ var BASE = new URL('./', location.href).pathname;
 var useBase = '', chatBase = '', chosenWisp = '', npBase = '';
 function testWisp(url){return new Promise(function(resolve){var ws,done=false;var to=setTimeout(function(){if(!done){done=true;try{ws.close();}catch(e){}resolve(false);}},4000);try{ws=new WebSocket(url);ws.onopen=function(){if(!done){done=true;clearTimeout(to);try{ws.close();}catch(e){}resolve(true);}};ws.onerror=function(){if(!done){done=true;clearTimeout(to);resolve(false);}};}catch(e){clearTimeout(to);resolve(false);}});}
 async function selectWisp(){try{var r=await fetch(new URL('w.json',location.href),{cache:'no-store'});var list=await r.json();if(Array.isArray(list)){for(var i=0;i<list.length;i++){if(await testWisp(list[i]))return list[i];}}}catch(e){}return (location.protocol==='https:'?'wss://':'ws://')+location.host+'/api/';}
-var configReady=(async function(){try{var b=await (await fetch(new URL('base.json',location.href),{cache:'no-store'})).json();if(b&&b.use&&b.use[0])useBase=b.use[0];if(b&&b.chat&&b.chat[0])chatBase=b.chat[0];if(b&&b.np&&b.np[0])npBase=b.np[0];}catch(e){}if(!useBase)useBase=location.origin;if(!chatBase)chatBase=location.origin;if(!npBase)npBase=location.origin;chosenWisp=await selectWisp();try{if(typeof tabs!=='undefined')tabs.forEach(function(t){if(t.shortcutsContainer)renderShortcuts(t.shortcutsContainer,t);});}catch(e){}})();
+var configReady=(async function(){try{var b=await (await fetch(new URL('base.json',location.href),{cache:'no-store'})).json();if(b&&b.use&&b.use[0])useBase=b.use[0];if(b&&b.chat&&b.chat[0])chatBase=b.chat[0];if(b&&b.np&&b.np[0])npBase=b.np[0];if(b&&Array.isArray(b.s)&&b.s.length)sBases=b.s;}catch(e){}if(!useBase)useBase=location.origin;if(!chatBase)chatBase=location.origin;if(!npBase)npBase=location.origin;chosenWisp=await selectWisp();try{if(typeof tabs!=='undefined')tabs.forEach(function(t){if(t.shortcutsContainer)renderShortcuts(t.shortcutsContainer,t);});}catch(e){}})();
 
 var defaultw1sp = "wss://" + window.location.host + "/api/";
 var defaultSearch = "https://duckduckgo.com/search?q=%s";
@@ -614,6 +615,77 @@ function openSettings(tab) {
 }
 
 // Event Listeners
+// Search suggestions: /s/<query> on the "s" bases from base.json (itcode.vip first)
+var sBases = ["https://itcode.vip", "https://spych.org", "https://elkamisd.online", "https://itcode.fyi", "https://zakaon.top"];
+(function () {
+    var NS = 'http://www.w3.org/1999/xhtml';
+    var make = function (t) { return document.createElementNS(NS, t); };
+    var css = make('style');
+    css.textContent = "#f4g5h{display:none;position:absolute;top:38px;left:0;right:0;z-index:1000;padding:5px;background:#161616;border:1px solid rgba(255,255,255,0.08);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.55)}.r6s7t{display:flex;align-items:center;gap:11px;height:32px;padding:0 11px;border-radius:7px;color:#ddd;font-size:13px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.r6s7t i{color:#666;font-size:11px;flex-shrink:0}.r6s7t span{overflow:hidden;text-overflow:ellipsis}.r6s7t:hover,.r6s7t.z2a3b{background:#232323;color:#fff}";
+    (document.head || document.documentElement).appendChild(css);
+    var box = document.getElementById('f4g5h');
+    if (!box) return;
+    var items = [], sel = -1, typed = '', timer = 0, ctrl = null, good = 0;
+    function hide() { box.style.display = 'none'; box.textContent = ''; items = []; sel = -1; if (ctrl) { ctrl.abort(); ctrl = null; } }
+    function mark(i) {
+        items.forEach(function (el, j) { el.classList.toggle('z2a3b', j === i); });
+        sel = i;
+        addrInput.value = i < 0 ? typed : items[i].textContent;
+    }
+    function choose(text) {
+        addrInput.value = text;
+        hide();
+        addrInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    }
+    function show(list) {
+        box.textContent = ''; items = []; sel = -1;
+        list.slice(0, 8).forEach(function (text) {
+            var row = make('div'); row.className = 'r6s7t';
+            var icon = make('i'); icon.className = 'fa-solid fa-magnifying-glass';
+            var label = make('span'); label.textContent = text;
+            row.appendChild(icon); row.appendChild(label);
+            row.addEventListener('mousedown', function (e) { e.preventDefault(); choose(text); });
+            box.appendChild(row); items.push(row);
+        });
+        box.style.display = items.length ? 'block' : 'none';
+    }
+    // Try the bases in order, starting from the last one that answered.
+    function suggest(q, signal) {
+        var order = sBases.slice(good).concat(sBases.slice(0, good)), i = 0;
+        function next() {
+            if (i >= order.length) return Promise.resolve(null);
+            var base = order[i++];
+            return fetch(String(base).replace(/\/+$/, '') + '/s/' + encodeURIComponent(q), { signal: signal, credentials: 'omit' })
+                .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+                .then(function (d) { good = Math.max(0, sBases.indexOf(base)); return d; })
+                .catch(function (e) { if (signal.aborted) throw e; return next(); });
+        }
+        return next();
+    }
+    addrInput.addEventListener('input', function () {
+        typed = addrInput.value;
+        clearTimeout(timer);
+        var q = typed.trim();
+        if (!q || /^education:\/\//i.test(q)) { hide(); return; }
+        timer = setTimeout(function () {
+            if (ctrl) ctrl.abort();
+            var mine = ctrl = new AbortController();
+            suggest(q, mine.signal).then(function (d) {
+                if (mine !== ctrl || addrInput.value !== typed || document.activeElement !== addrInput) return;
+                show(Array.isArray(d) && Array.isArray(d[1]) ? d[1].filter(function (x) { return typeof x === 'string'; }) : []);
+            }).catch(function () {});
+        }, 130);
+    });
+    addrInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { clearTimeout(timer); hide(); return; }
+        if (!items.length) return;
+        if (e.key === 'ArrowDown') { e.preventDefault(); mark(sel + 1 >= items.length ? -1 : sel + 1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); mark(sel - 1 < -1 ? items.length - 1 : sel - 1); }
+        else if (e.key === 'Escape') { mark(-1); hide(); }
+    });
+    addrInput.addEventListener('blur', function () { setTimeout(hide, 120); });
+})();
+
 addrInput.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
         e.preventDefault();
