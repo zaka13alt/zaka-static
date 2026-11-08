@@ -186,7 +186,8 @@ function faviconCandidates(pageUrl){
   }catch(_){return[];}
 }
 
-function loadFavicon(img,pageUrl,onFail){
+function loadFavicon(img, pageUrl, onFail) {
+    if (!npBase) { configReady.then(function () { loadFavicon(img, pageUrl, onFail); }); return; }
   var list=faviconCandidates(pageUrl);
   var idx=0;
   function next(){if(idx>=list.length){img.onerror=null;if(onFail)onFail();return;}img.src=list[idx++];}
@@ -458,7 +459,7 @@ function renderShortcuts(container,tab){
     ic.className='c1d2e';
     if(s.img){
       var iconImg=mk('img');
-      iconImg.src=/^https?:\/\//i.test(s.img)?(npBase||location.origin)+'/np/'+s.img:s.img;
+      if (/^https?:\/\//i.test(s.img)) { (function (img, src) { var set = function () { img.src = (npBase || location.origin) + '/np/' + src; }; if (npBase) set(); else configReady.then(set); })(iconImg, s.img); } else iconImg.src = s.img;
       iconImg.alt=s.name;
       ic.appendChild(iconImg);
     }else{
