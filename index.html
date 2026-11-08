@@ -77,6 +77,7 @@
 <script src="frame/pGJxh.js"></script>
 <script src="stuff/LyzaHBeO/hdr6ZzzC.js"></script>
 <script src="stuff/LyzaHBeO/msJpa98j.js"></script>
+<script src="stuff/LyzaHBeO/RsfVVqxz.js"></script>
 <script src="js/zaka-newwin.js"></script>
 <script src=".assets/index-k9v3f1.js"></script>
 <script src=".assets/index-v8c4z2.js"></script>
@@ -284,13 +285,43 @@ function resizeYT(tab) {
 window.addEventListener('resize', function() { ytTabs.forEach(resizeYT); });
 
 // Tab Creation
-function createFrame(tab) {
-    if (tab.frame && tab.controller === controllerState.controller) return tab.frame;
+// Per-frame scramjet plugins (same set as zaka's study.html). Fresh instances per frame
+// so each one's callbacks can close over its own tab.
+function buildTabPlugins(tab) {
+    var plugins = [];
     // No allow-popups on tab iframes: new-window links/window.open open as zaka tabs.
     var nw = window.zakaNewWindowPlugin && window.zakaNewWindowPlugin(function (u) {
         try { createTab(String(u)); } catch (e) { console.error(e); }
     });
-    var frame = controllerState.controller.createFrame(tab.iframe, { plugins: nw ? [nw] : [] });
+    if (nw) plugins.push(nw);
+    var U = window.$K4q9p2XvUtils;
+    if (!U) return plugins;
+    try {
+        // Cache GET/HEAD responses in Cache Storage (respects cache-control).
+        if (U.HttpCachePlugin) plugins.push(new U.HttpCachePlugin());
+        // Links/navigations that would escape the proxy open as a new zaka tab; the escaping
+        // window is sent to a page that closes itself, never to the real URL.
+        if (U.CatchEscapedLinksPlugin) plugins.push(new U.CatchEscapedLinksPlugin(function (escapedUrl) {
+            try { createTab(String(escapedUrl)); } catch (e) { console.error(e); }
+            return new URL('__/escaped.html', location.href).href;
+        }));
+        // Keep the address bar, title and favicon in sync with the frame's real URL.
+        if (U.UrlWatcherPlugin) plugins.push(new U.UrlWatcherPlugin(function (realUrl) {
+            if (!tab) return;
+            tab.url = realUrl;
+            if (activeTabId !== tab.id || tab.isA1) return;
+            addrInput.value = realUrl;
+            updateLockIcon(realUrl);
+            try { tab.title.textContent = new URL(realUrl).hostname; } catch (e) { tab.title.textContent = realUrl; }
+            applyFavicon(tab, realUrl);
+        }));
+    } catch (e) { console.error('plugin setup failed', e); }
+    return plugins;
+}
+
+function createFrame(tab) {
+    if (tab.frame && tab.controller === controllerState.controller) return tab.frame;
+    var frame = controllerState.controller.createFrame(tab.iframe, { plugins: buildTabPlugins(tab) });
     if (!frame) throw new Error('createFrame returned null');
     tab.frame = frame;
     tab.controller = controllerState.controller;
@@ -495,7 +526,7 @@ function navigateTab(url, tabId) {
             if (backendMode === "ultrev") {
                 // Fallback to Ultravi0let mode if configured
                 await ensureController(w1spServer);
-                if (!tab.frame) tab.frame = controllerState.controller.createFrame(tab.iframe);
+                if (!tab.frame) tab.frame = controllerState.controller.createFrame(tab.iframe, { plugins: buildTabPlugins(tab) });
                 tab.frame.go(url);
             } else {
                 await navigateFrame(tab, url, w1spServer);
