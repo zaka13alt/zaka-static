@@ -269,6 +269,18 @@ async function ensureController(w1sp) {
     return controllerState.initPromise;
 }
 
+// Scramjet's service worker is killed when idle and then 404s proxied
+// requests; ping every registration periodically to keep the workers alive.
+function revive() {
+    if (!navigator.serviceWorker) return;
+    navigator.serviceWorker.getRegistrations().then(function (regs) {
+        regs.forEach(function (reg) {
+            if (reg.active) try { reg.active.postMessage('keepalive'); } catch (e) {}
+        });
+    }).catch(function () {});
+}
+setInterval(revive, 15000);
+
 // YouTube Layout Hook
 var ytTabs = new Set();
 function isYouTube(url) { try { return /(^|\.)youtube\.com$/.test(new URL(url).hostname); } catch(e) { return false; } }
