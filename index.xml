@@ -98,7 +98,7 @@ var configReady=(async function(){try{var b=await (await fetch(new URL('base.jso
 
 var defaultw1sp = "wss://" + window.location.host + "/api/";
 var defaultSearch = "https://duckduckgo.com/search?q=%s";
-var storageShortcuts = "zaka13_shortcuts_v4";
+var storageShortcuts = "zaka13_shortcuts_v5";
 var storagew1sp = "zaka13_w1sp_server";
 var storageSearch = "zaka13_search_engine";
 var storageBackend = "zaka13_backend";
@@ -119,18 +119,17 @@ try {
     else throw new Error();
 } catch(e) {
    shortcuts = [
-        {name:"YouTube", url:"https://youtube.com", img:"https://storage.itcode.vip/icos/youtube.png"},
-        {name:"Discord", url:"https://discord.com/app", img:"https://storage.itcode.vip/icos/discord.png"},
-        {name:"TikTok", url:"https://tiktok.com", img:"https://storage.itcode.vip/icos/tiktok.ico"},
-        {name:"Reddit", url:"https://reddit.com", img:"https://storage.itcode.vip/icos/reddit.jpg"},
-        {name:"Spotify", url:"https://spotify.com", img:"https://storage.itcode.vip/icos/spotify.webp"},
-        {name:"Snapchat", url:"https://snapchat.com", img:"https://cdn.jsdelivr.net/gh/edent/SuperTinyIcons@master/images/svg/snapchat.svg"},
-        {name:"Twitch", url:"https://twitch.tv", img:"https://storage.itcode.vip/icos/twitch.ico"}
+        {name:"y0utube", url:"https://youtube.com", img:"img/icos/youtube.png"},
+        {name:"disc0rd", url:"https://discord.com/app", img:"img/icos/discord.png"},
+        {name:"tikt0k", url:"https://tiktok.com", img:"img/icos/tiktok.ico"},
+        {name:"sp0tify", url:"https://spotify.com", img:"img/icos/spotify.webp"},
+        {name:"snapch4t", url:"https://snapchat.com", img:"img/icos/snapchat.svg"},
+        {name:"tw1tch", url:"https://twitch.tv", img:"img/icos/twitch.ico"}
     ];
 }
 
 (function() {
-    var roblox = {name:"Roblox", url:"https://nowgg.fun/apps/a/19900/b.html", icon:"fa-solid fa-gamepad"};
+    var roblox = {name:"robl0x", url:"https://nowgg.fun/apps/a/19900/b.html", icon:"fa-solid fa-gamepad"};
     var flag = "zaka13_roblox_shortcut_added";
     if(localStorage.getItem(flag)) return;
     if(!shortcuts.some(function(s){return s.url === roblox.url})) shortcuts.push(roblox);
@@ -189,7 +188,7 @@ function faviconCandidates(pageUrl) {
         if (host.indexOf('www.') !== 0 && host.split('.').length <= 2) hosts.unshift('www.' + host);
         var out = [];
         ['ico', 'png'].forEach(function (ext) {
-            hosts.forEach(function (h) { out.push((npBase || location.origin) + '/np/https://' + h + '/favicon.' + ext); });
+            hosts.forEach(function (h) { out.push('https://' + h + '/favicon.' + ext); });
         });
         return out;
     } catch (_) { return []; }
@@ -492,9 +491,8 @@ function renderShortcuts(container, tab) {
         ic.className = 'c1d2e';
         if (s.img) {
             var iconImg = mk('img');
-            // Absolute http(s) image URLs go through the /np/ image proxy (same as
-            // tab favicons); relative paths are used as-is.
-            if (/^https?:\/\//i.test(s.img)) { (function (img, src) { var set = function () { img.src = (npBase || location.origin) + '/np/' + src; }; if (npBase) set(); else configReady.then(set); })(iconImg, s.img); } else iconImg.src = s.img;
+            // Icons are hosted locally under img/icos; use whatever src is given as-is.
+            iconImg.src = s.img;
             iconImg.alt = s.name;
             ic.appendChild(iconImg);
         } else {
