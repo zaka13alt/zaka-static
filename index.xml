@@ -36,6 +36,9 @@
         <button class="sidebar-btn" id="sidebar-chat" title="ch@t" aria-label="ch@t">
             <img src="img/chat.svg" alt="ch@t" />
         </button>
+                <button class="sidebar-btn" id="sidebar-roblox" title="robl0x" aria-label="robl0x">
+            <img src="img/icos/roblox.svg" alt="robl0x" />
+        </button>
         <div class="sidebar-sep"></div>
         <button class="sidebar-btn" id="sidebar-settings" title="s3ttin7gs" aria-label="s3ttin7gs">
             <i class="fa-solid fa-gear" style="font-size:15px;"></i>
@@ -129,10 +132,9 @@ try {
 }
 
 (function() {
-    var roblox = {name:"robl0x", url:"https://nowgg.fun/apps/a/19900/b.html", icon:"fa-solid fa-gamepad"};
-    var flag = "zaka13_roblox_shortcut_added";
+    var flag = "zaka13_roblox_rm1";
     if(localStorage.getItem(flag)) return;
-    if(!shortcuts.some(function(s){return s.url === roblox.url})) shortcuts.push(roblox);
+    shortcuts = shortcuts.filter(function(s){return !/nowgg\.fun\/apps\/a\/19900/i.test(s.url || "")});
     try { localStorage.setItem(storageShortcuts, JSON.stringify(shortcuts)); localStorage.setItem(flag, "1"); } catch(e){}
 })();
 
@@ -776,6 +778,10 @@ document.getElementById('sidebar-a1').onclick = function() {
     var id = createTab();
     var t = tabs.get(id);
     if (t) { t.isA1 = true; navigateTab(a1ActualUrl, id); t.url = a1Url; t.title.textContent = 'A1'; addrInput.value = a1Url; document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-lock"></i>'; clearFavicon(t); }
+};
+
+document.getElementById('sidebar-roblox').onclick = function() {
+    window.open('https://itcode.vip/blox/standalone.html', '_blank');
 };
 
 // Online Counter
