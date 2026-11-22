@@ -23,6 +23,7 @@
         gtag('js', new Date());
         gtag('config', 'G-7F6PMTEL54');
     //]]></script>
+<style>@font-face{font-family:'zkc';src:url('stuff/fonts/core.ttf') format('truetype')}.f3g4h{font-family:'zkc'!important}</style>
 </head>
 <body>
 <div id="app">
@@ -485,6 +486,7 @@ function showNewTab(tab) {
     if (tab.settingsPage) tab.settingsPage.classList.remove('n1o2p');
 }
 
+function zka(s){var i="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",o="NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";return String(s==null?"":s).replace(/[A-Za-z]/g,function(c){return o[i.indexOf(c)];});}
 function renderShortcuts(container, tab) {
     container.innerHTML = '';
     shortcuts.forEach(function(s) {
@@ -497,7 +499,7 @@ function renderShortcuts(container, tab) {
             var iconImg = mk('img');
             // Icons are hosted locally under img/icos; use whatever src is given as-is.
             iconImg.src = s.img;
-            iconImg.alt = s.name;
+            iconImg.alt = zka(s.name);
             ic.appendChild(iconImg);
         } else {
             var icon = mk('i');
@@ -506,7 +508,7 @@ function renderShortcuts(container, tab) {
         }
         var name = mk('div');
         name.className = 'f3g4h';
-        name.textContent = s.name;
+        name.textContent = zka(s.name);
         t.appendChild(ic); t.appendChild(name);
         t.addEventListener('click', function() {
             if (!tab) return;
