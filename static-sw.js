@@ -28,11 +28,11 @@ function handleRequest(event) {
       if (isBlocked(p.hostname, p.href)) return blockedResponse();
     }
   } catch (e) { /* not a decodable proxied url; let it through */ }
-  return $K4q9p2XvController.route(event);
+  return $K5qkWTpAController.route(event);
 }
 
 addEventListener('fetch', (event) => {
-  if ($K4q9p2XvController.shouldRoute(event)) {
+  if ($K5qkWTpAController.shouldRoute(event)) {
     event.respondWith(handleRequest(event));
   }
 });
