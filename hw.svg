@@ -117,20 +117,20 @@ function testWisp(url){return new Promise(function(resolve){var ws,done=false;va
 async function selectWisp(){try{var r=await fetch(new URL('w.json',location.href),{cache:'no-store'});var list=await r.json();if(Array.isArray(list)){for(var i=0;i<list.length;i++){if(await testWisp(list[i]))return list[i];}}}catch(e){}return (location.protocol==='https:'?'wss://':'ws://')+location.host+'/api/';}
 function testBase(base){return new Promise(function(resolve){if(!base){resolve(false);return;}var done=false;var to=setTimeout(function(){if(!done){done=true;resolve(false);}},3500);try{fetch(base.replace(/\/$/,'')+'/w.json',{mode:'no-cors',cache:'no-store'}).then(function(){if(!done){done=true;clearTimeout(to);resolve(true);}}).catch(function(){if(!done){done=true;clearTimeout(to);resolve(false);}});}catch(e){clearTimeout(to);resolve(false);}});}
 async function pickBase(list){if(!Array.isArray(list)||!list.length)return '';for(var i=0;i<list.length;i++){try{if(await testBase(list[i]))return list[i];}catch(e){}}return list[0]||'';}
-var configReady=(async function(){var uList=null,cList=null,nList=null;try{var b=await (await fetch(new URL('base.json',location.href),{cache:'no-store'})).json();if(b&&Array.isArray(b.use))uList=b.use;if(b&&Array.isArray(b.chat))cList=b.chat;if(b&&Array.isArray(b.np))nList=b.np;if(b&&Array.isArray(b.s)&&b.s.length)sBases=b.s;}catch(e){}var picks=await Promise.all([pickBase(uList||[]),pickBase(cList||[]),pickBase(nList||[]),selectWisp()]);useBase=picks[0]||location.origin;chatBase=picks[1]||location.origin;npBase=picks[2]||location.origin;chosenWisp=picks[3];try{if(typeof tabs!=='undefined')tabs.forEach(function(t){if(t.shortcutsContainer)renderShortcuts(t.shortcutsContainer,t);});}catch(e){}})();
+var configReady=(async function(){var uList=null,cList=null,nList=null;try{var b=await (await fetch(new URL('base.json',location.href),{cache:'no-store'})).json();if(b&&Array.isArray(b.use))uList=b.use;if(b&&Array.isArray(b.chat))cList=b.chat;if(b&&Array.isArray(b.np))nList=b.np;if(b&&Array.isArray(b.s)&&b.s.length)sBases=b.s;}catch(e){}var picks=await Promise.all([pickBase(uList||[]),pickBase(cList||[]),pickBase(nList||[]),selectWisp()]);useBase=picks[0]||location.origin;chatBase=picks[1]||location.origin;npBase=picks[2]||location.origin;chosenWisp=picks[3];try{if(typeof zkls!=='undefined')zkls.forEach(function(t){if(t.shortcutsContainer)renderShortcuts(t.shortcutsContainer,t);});}catch(e){}})();
 
-var defaultw1sp = "wss://" + window.location.host + "/api/";
+var defaultzkw = "wss://" + window.location.host + "/api/";
 var defaultSearch = "https://duckduckgo.com/search?q=%s";
 var storageShortcuts = "zaka13_shortcuts_v5";
-var storagew1sp = "zaka13_w1sp_server";
+var storagezkw = "zaka13_zkw_server";
 var storageSearch = "zaka13_search_engine";
 var storageBackend = "zaka13_backend";
 
-var tabs = new Map();
-var activeTabId = null;
-var tabCounter = 0;
+var zkls = new Map();
+var activeZklId = null;
+var zklCounter = 0;
 
-var w1spServer = localStorage.getItem(storagew1sp) || defaultw1sp;
+var zkwServer = localStorage.getItem(storagezkw) || defaultzkw;
 var searchEngine = localStorage.getItem(storageSearch) || defaultSearch;
 if(searchEngine.indexOf('%s') < 0) searchEngine = defaultSearch;
 var backendMode = localStorage.getItem(storageBackend) || "default";
@@ -174,7 +174,7 @@ try {
     try { localStorage.setItem(storageShortcuts, JSON.stringify(shortcuts)); localStorage.setItem(flag, "1"); } catch(e){}
 })();
 
-var tabBar = document.getElementById("c9d0e");
+var zklBar = document.getElementById("c9d0e");
 var viewRoot = document.getElementById("h7i8j");
 var addrInput = document.getElementById("t3u4v");
 var plusBtn = document.getElementById("u1v2w");
@@ -230,9 +230,9 @@ function loadFavicon(img, pageUrl, onFail) {
     next();
 }
 
-function applyFavicon(tab, url) {
-    if (!tab || !tab.faviconImg) return;
-    var img = tab.faviconImg;
+function applyFavicon(zkl, url) {
+    if (!zkl || !zkl.faviconImg) return;
+    var img = zkl.faviconImg;
     if (!faviconCandidates(url).length) { img.style.display = 'none'; return; }
     img.style.display = 'block';
     loadFavicon(img, url, function () { img.style.display = 'none'; });
@@ -243,18 +243,18 @@ function updateLockIcon(url) {
     document.getElementById('p5q6r').innerHTML = '<i class="fa-solid ' + icon + '"></i>';
 }
 
-function clearFavicon(tab) {
-    if (!tab || !tab.faviconImg) return;
-    tab.faviconImg.src = '';
-    tab.faviconImg.style.display = 'none';
+function clearFavicon(zkl) {
+    if (!zkl || !zkl.faviconImg) return;
+    zkl.faviconImg.src = '';
+    zkl.faviconImg.style.display = 'none';
 }
 
 // Core Controller Initialization
 var controllerState = { controller: null, initPromise: null, transport: null };
 
-async function inits(w1sp) {
+async function inits(zkw) {
     await configReady;
-    var transportClient = new window.L1bcTransport.L1bcClient({w1p: chosenWisp || w1sp});
+    var transportClient = new window.L1bcTransport.L1bcClient({w1p: chosenWisp || zkw});
     await transportClient.init();
     var wrappedTransport = window.cfSolver.wrap(transportClient);
 
@@ -280,17 +280,17 @@ async function inits(w1sp) {
     return ctrl;
 }
 
-async function ensureController(w1sp) {
-    if (controllerState.transport === w1sp && controllerState.controller) return controllerState.controller;
-    if (controllerState.initPromise && controllerState.transport === w1sp) return controllerState.initPromise;
+async function ensureController(zkw) {
+    if (controllerState.transport === zkw && controllerState.controller) return controllerState.controller;
+    if (controllerState.initPromise && controllerState.transport === zkw) return controllerState.initPromise;
 
-    controllerState.transport = w1sp;
-    controllerState.initPromise = inits(w1sp).then(function(ctrl) {
+    controllerState.transport = zkw;
+    controllerState.initPromise = inits(zkw).then(function(ctrl) {
         controllerState.controller = ctrl;
     });
 
     controllerState.initPromise.catch(function() {
-        if (controllerState.transport === w1sp) {
+        if (controllerState.transport === zkw) {
             controllerState.controller = null;
             controllerState.initPromise = null;
         }
@@ -310,106 +310,112 @@ function revive() {
 }
 setInterval(revive, 15000);
 
-// YouTube Layout Hook
-var ytTabs = new Set();
-function isYouTube(url) { try { return /(^|\.)youtube\.com$/.test(new URL(url).hostname); } catch(e) { return false; } }
-function resizeYT(tab) {
-    var iframe = tab.iframe, parent = iframe.parentNode;
-    if (!parent) return;
-    var w = parent.clientWidth, h = parent.clientHeight;
-    var scale = tab.frame && tab.isYT && isYouTube(tab.lastUrl) && w > 980 ? w / 980 : 1;
-    if (scale === 1) { iframe.style.width = ''; iframe.style.height = ''; iframe.style.transform = ''; return; }
-    iframe.style.width = (w / scale) + 'px';
-    iframe.style.height = (h / scale) + 'px';
-    iframe.style.transformOrigin = '0 0';
-    iframe.style.transform = 'scale(' + scale + ')';
+var _SkipVTPlugin = null;
+function skipViewTransitionsPlugin() {
+    var U = window.$K5qkWTpAUtils;
+    if (!U || !U.ManagedPlugin) return null;
+    if (!_SkipVTPlugin) {
+        _SkipVTPlugin = class extends U.ManagedPlugin {
+            constructor() { super('skip-view-transitions', []); }
+            install(host) {
+                super.install(host);
+                this.tap(host.hooks.init.post, function (ctx) {
+                    ctx.client.Proxy('Document.prototype.startViewTransition', {
+                        apply: function (c) {
+                            var t = c.call();
+                            if (t && t.skipTransition) t.skipTransition();
+                            c.return(t);
+                        }
+                    });
+                });
+            }
+        };
+    }
+    try { return new _SkipVTPlugin(); } catch (e) { console.error('skip-view-transitions plugin failed', e); return null; }
 }
-window.addEventListener('resize', function() { ytTabs.forEach(resizeYT); });
 
-// Tab Creation
+// Zkl Creation
 // Per-frame scramjet plugins (same set as zaka's study.html). Fresh instances per frame
-// so each one's callbacks can close over its own tab.
-function buildTabPlugins(tab) {
+// so each one's callbacks can close over its own zkl.
+function buildZklPlugins(zkl) {
     var plugins = [];
-    // No allow-popups on tab iframes: new-window links/window.open open as zaka tabs.
+    // No allow-popups on zkl iframes: new-window links/window.open open as zaka zkls.
     var nw = window.zakaNewWindowPlugin && window.zakaNewWindowPlugin(function (u) {
-        try { createTab(String(u)); } catch (e) { console.error(e); }
+        try { createZkl(String(u)); } catch (e) { console.error(e); }
     });
     if (nw) plugins.push(nw);
     var U = window.$K5qkWTpAUtils;
     if (!U) return plugins;
     try {
+        var svt = skipViewTransitionsPlugin();
+        if (svt) plugins.push(svt);
         // Cache GET/HEAD responses in Cache Storage (respects cache-control).
         if (U.HttpCachePlugin) plugins.push(new U.HttpCachePlugin());
-        // Links/navigations that would escape the proxy open as a new zaka tab; the escaping
+        // Links/navigations that would escape the proxy open as a new zaka zkl; the escaping
         // window is sent to a page that closes itself, never to the real URL.
         if (U.CatchEscapedLinksPlugin) plugins.push(new U.CatchEscapedLinksPlugin(function (escapedUrl) {
-            try { createTab(String(escapedUrl)); } catch (e) { console.error(e); }
+            try { createZkl(String(escapedUrl)); } catch (e) { console.error(e); }
             return new URL('__/escaped.html', location.href).href;
         }));
         // Keep the address bar, title and favicon in sync with the frame's real URL.
         if (U.UrlWatcherPlugin) plugins.push(new U.UrlWatcherPlugin(function (realUrl) {
-            if (!tab) return;
-            tab.url = realUrl;
-            if (activeTabId !== tab.id || tab.isA1) return;
+            if (!zkl) return;
+            zkl.url = realUrl;
+            if (activeZklId !== zkl.id || zkl.isA1) return;
             addrInput.value = realUrl;
             updateLockIcon(realUrl);
-            try { tab.title.textContent = new URL(realUrl).hostname; } catch (e) { tab.title.textContent = realUrl; }
-            applyFavicon(tab, realUrl);
+            try { zkl.title.textContent = new URL(realUrl).hostname; } catch (e) { zkl.title.textContent = realUrl; }
+            applyFavicon(zkl, realUrl);
         }));
     } catch (e) { console.error('plugin setup failed', e); }
     return plugins;
 }
 
-function createFrame(tab) {
-    if (tab.frame && tab.controller === controllerState.controller) return tab.frame;
-    var frame = controllerState.controller.createFrame(tab.iframe, { plugins: buildTabPlugins(tab) });
+function createFrame(zkl) {
+    if (zkl.frame && zkl.controller === controllerState.controller) return zkl.frame;
+    var frame = controllerState.controller.createFrame(zkl.iframe, { plugins: buildZklPlugins(zkl) });
     if (!frame) throw new Error('createFrame returned null');
-    tab.frame = frame;
-    tab.controller = controllerState.controller;
-    ytTabs.add(tab);
+    zkl.frame = frame;
+    zkl.controller = controllerState.controller;
     return frame;
 }
 
-async function navigateFrame(tab, url, w1sp) {
-    await ensureController(w1sp);
-    var frame = createFrame(tab);
-    tab.isYT = true;
-    tab.lastUrl = url;
-    resizeYT(tab);
+async function navigateFrame(zkl, url, zkw) {
+    await ensureController(zkw);
+    var frame = createFrame(zkl);
     frame.go(url);
 }
 
-function createTab(startUrl) {
-    var id = ++tabCounter;
-    var tabEl = mk('div');
-    tabEl.className = 'f1g2h';
-    tabEl.draggable = true;
-    tabEl.dataset.tabId = id;
+function createZkl(startUrl) {
+    var id = ++zklCounter;
+    var zklEl = mk('div');
+    zklEl.className = 'f1g2h';
+    zklEl.draggable = true;
+    zklEl.dataset.zklId = id;
 
     var favImg = mk('img');
-    favImg.className = 'tab-favicon';
+    favImg.className = 'zkl-favicon';
     favImg.style.display = 'none';
-    tabEl.appendChild(favImg);
+    zklEl.appendChild(favImg);
 
     var title = mk('span');
     title.className = 'o7p8q';
     title.textContent = startUrl || 'n3w t3b';
-    tabEl.appendChild(title);
+    zklEl.appendChild(title);
 
     var closeBtn = mk('button');
     closeBtn.className = 'r9s0t';
     closeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-    closeBtn.onclick = function(e) { e.stopPropagation(); closeTab(id); };
-    tabEl.appendChild(closeBtn);
-    tabEl.onclick = function() { activateTab(id); };
+    closeBtn.onclick = function(e) { e.stopPropagation(); closeZkl(id); };
+    zklEl.appendChild(closeBtn);
+    zklEl.onclick = function() { activateZkl(id); };
 
     var iframe = mk('iframe');
     iframe.className = 'k9l0m';
     iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-modals allow-downloads allow-pointer-lock allow-storage-access-by-user-activation');
 
-    var newTabPage = mk('div');
-    newTabPage.className = 'q3r4s';
+    var newZklPage = mk('div');
+    newZklPage.className = 'q3r4s';
     var svgNS = "http://www.w3.org/2000/svg";
     var svg = document.createElementNS(svgNS, "svg");
     svg.setAttribute("class", "t5u6v");
@@ -426,86 +432,86 @@ function createTab(startUrl) {
 
     var grid = mk('div');
     grid.className = 'w7x8y';
-    newTabPage.appendChild(svg);
-    newTabPage.appendChild(grid);
+    newZklPage.appendChild(svg);
+    newZklPage.appendChild(grid);
 
-    tabBar.insertBefore(tabEl, plusBtn);
+    zklBar.insertBefore(zklEl, plusBtn);
     viewRoot.appendChild(iframe);
-    viewRoot.appendChild(newTabPage);
+    viewRoot.appendChild(newZklPage);
 
-    var tab = { id: id, tab: tabEl, iframe: iframe, title: title, url: startUrl || '', newTabPage: newTabPage, settingsPage: null, shortcutsContainer: grid, frame: null, w1sp: w1spServer, isA1: false, faviconImg: favImg };
-    tabs.set(id, tab);
-    renderShortcuts(grid, tab);
-    activateTab(id);
+    var zkl = { id: id, zkl: zklEl, iframe: iframe, title: title, url: startUrl || '', newZklPage: newZklPage, settingsPage: null, shortcutsContainer: grid, frame: null, zkw: zkwServer, isA1: false, faviconImg: favImg };
+    zkls.set(id, zkl);
+    renderShortcuts(grid, zkl);
+    activateZkl(id);
 
     if (startUrl) {
         if (startUrl === settingsUrl || startUrl === page50000 || startUrl === page50001 || startUrl === page50002) {
-            openSettings(tab);
+            openSettings(zkl);
         } else {
-            navigateTab(startUrl, id);
+            navigateZkl(startUrl, id);
         }
     }
     return id;
 }
 
-function closeTab(id) {
-    var tab = tabs.get(id);
-    if (!tab) return;
-    var wasActive = activeTabId === id;
-    tab.tab.remove();
-    tab.iframe.remove();
-    if (tab.newTabPage) tab.newTabPage.remove();
-    if (tab.settingsPage) tab.settingsPage.remove();
-    tabs.delete(id);
-    if (tabs.size === 0) { createTab(); return; }
+function closeZkl(id) {
+    var zkl = zkls.get(id);
+    if (!zkl) return;
+    var wasActive = activeZklId === id;
+    zkl.zkl.remove();
+    zkl.iframe.remove();
+    if (zkl.newZklPage) zkl.newZklPage.remove();
+    if (zkl.settingsPage) zkl.settingsPage.remove();
+    zkls.delete(id);
+    if (zkls.size === 0) { createZkl(); return; }
     if (wasActive) {
-        var keys = Array.from(tabs.keys());
+        var keys = Array.from(zkls.keys());
         var idx = keys.indexOf(id);
-        activateTab(keys[Math.max(0, idx - 1)]);
+        activateZkl(keys[Math.max(0, idx - 1)]);
     }
 }
 
-function activateTab(id) {
-    var tab = tabs.get(id);
-    if (!tab) return;
-    tabs.forEach(function(t) {
-        t.tab.classList.remove('i3j4k');
+function activateZkl(id) {
+    var zkl = zkls.get(id);
+    if (!zkl) return;
+    zkls.forEach(function(t) {
+        t.zkl.classList.remove('i3j4k');
         t.iframe.classList.remove('n1o2p');
-        if (t.newTabPage) t.newTabPage.style.display = 'none';
+        if (t.newZklPage) t.newZklPage.style.display = 'none';
         if (t.settingsPage) t.settingsPage.classList.remove('n1o2p');
     });
-    tab.tab.classList.add('i3j4k');
-    activeTabId = id;
+    zkl.zkl.classList.add('i3j4k');
+    activeZklId = id;
 
-    if (tab.url === settingsUrl || tab.url === page50000 || tab.url === page50001 || tab.url === page50002) {
-        openSettings(tab);
-    } else if (tab.isA1) {
-        tab.iframe.classList.add('n1o2p');
+    if (zkl.url === settingsUrl || zkl.url === page50000 || zkl.url === page50001 || zkl.url === page50002) {
+        openSettings(zkl);
+    } else if (zkl.isA1) {
+        zkl.iframe.classList.add('n1o2p');
         addrInput.value = a1Url;
         document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-lock"></i>';
-    } else if (tab.url) {
-        tab.iframe.classList.add('n1o2p');
-        addrInput.value = tab.url;
-        updateLockIcon(tab.url);
+    } else if (zkl.url) {
+        zkl.iframe.classList.add('n1o2p');
+        addrInput.value = zkl.url;
+        updateLockIcon(zkl.url);
     } else {
-        if (tab.newTabPage) tab.newTabPage.style.display = 'flex';
+        if (zkl.newZklPage) zkl.newZklPage.style.display = 'flex';
         addrInput.value = '';
         document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-globe"></i>';
     }
 }
 
-function hideNewTab(tab) {
-    if (tab.newTabPage) tab.newTabPage.style.display = 'none';
-    tab.iframe.classList.remove('n1o2p');
-    if (tab.settingsPage) tab.settingsPage.classList.remove('n1o2p');
+function hideNewZkl(zkl) {
+    if (zkl.newZklPage) zkl.newZklPage.style.display = 'none';
+    zkl.iframe.classList.remove('n1o2p');
+    if (zkl.settingsPage) zkl.settingsPage.classList.remove('n1o2p');
 }
 
-function showNewTab(tab) {
-    if (tab.newTabPage) tab.newTabPage.style.display = 'flex';
-    if (tab.settingsPage) tab.settingsPage.classList.remove('n1o2p');
+function showNewZkl(zkl) {
+    if (zkl.newZklPage) zkl.newZklPage.style.display = 'flex';
+    if (zkl.settingsPage) zkl.settingsPage.classList.remove('n1o2p');
 }
 
-function renderShortcuts(container, tab) {
+function renderShortcuts(container, zkl) {
     container.innerHTML = '';
     shortcuts.forEach(function(s) {
         var t = mk('div');
@@ -529,11 +535,11 @@ function renderShortcuts(container, tab) {
         name.textContent = zka(s.name);
         t.appendChild(ic); t.appendChild(name);
         t.addEventListener('click', function() {
-            if (!tab) return;
-            tab.url = s.url;
-            tab.title.textContent = s.name;
-            hideNewTab(tab);
-            navigateTab(s.url, tab.id);
+            if (!zkl) return;
+            zkl.url = s.url;
+            zkl.title.textContent = s.name;
+            hideNewZkl(zkl);
+            navigateZkl(s.url, zkl.id);
         });
         container.appendChild(t);
     });
@@ -543,11 +549,11 @@ function renderShortcuts(container, tab) {
     dc.addEventListener('click', function(e) {
         e.preventDefault();
         var u = 'https://discord.gg/33fPjXZPd';
-        if (!tab) return;
-        tab.url = u;
-        tab.title.textContent = 'discord';
-        hideNewTab(tab);
-        navigateTab(u, tab.id);
+        if (!zkl) return;
+        zkl.url = u;
+        zkl.title.textContent = 'discord';
+        hideNewZkl(zkl);
+        navigateZkl(u, zkl.id);
     });
     var dci = mk('img');
     dci.src = BASE + 'img/dc.svg';
@@ -565,28 +571,28 @@ function parseInput(input) {
     return searchEngine.replace('%s', encodeURIComponent(val));
 }
 
-function navigateTab(url, tabId) {
-    var tab = tabs.get(tabId);
-    if (!tab) return;
-    hideNewTab(tab);
+function navigateZkl(url, zklId) {
+    var zkl = zkls.get(zklId);
+    if (!zkl) return;
+    hideNewZkl(zkl);
 
     var executeNav = async function() {
         try {
             if (backendMode === "ultrev") {
                 // Fallback to Ultravi0let mode if configured
-                await ensureController(w1spServer);
-                if (!tab.frame) tab.frame = controllerState.controller.createFrame(tab.iframe, { plugins: buildTabPlugins(tab) });
-                tab.frame.go(url);
+                await ensureController(zkwServer);
+                if (!zkl.frame) zkl.frame = controllerState.controller.createFrame(zkl.iframe, { plugins: buildZklPlugins(zkl) });
+                zkl.frame.go(url);
             } else {
-                await navigateFrame(tab, url, w1spServer);
+                await navigateFrame(zkl, url, zkwServer);
             }
-            tab.iframe.classList.add('n1o2p');
-            if (!tab.isA1) {
-                tab.url = url;
+            zkl.iframe.classList.add('n1o2p');
+            if (!zkl.isA1) {
+                zkl.url = url;
                 addrInput.value = url;
                 updateLockIcon(url);
-                try { tab.title.textContent = new URL(url).hostname; } catch(e) { tab.title.textContent = url; }
-                applyFavicon(tab, url);
+                try { zkl.title.textContent = new URL(url).hostname; } catch(e) { zkl.title.textContent = url; }
+                applyFavicon(zkl, url);
             }
         } catch(err) {
             console.error(err);
@@ -595,10 +601,10 @@ function navigateTab(url, tabId) {
     executeNav();
 }
 
-function openSettings(tab) {
-    if (!tab.settingsPage) {
-        tab.settingsPage = mk('div');
-        tab.settingsPage.className = 'i5j6k';
+function openSettings(zkl) {
+    if (!zkl.settingsPage) {
+        zkl.settingsPage = mk('div');
+        zkl.settingsPage.className = 'i5j6k';
 
         var wrap = mk('div');
         wrap.className = 'l7m8n';
@@ -609,13 +615,13 @@ function openSettings(tab) {
         backBtn.className = 'r1s2t';
         backBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
         backBtn.onclick = function() {
-            tab.url = '';
-            tab.title.textContent = 'n3w t3b';
-            showNewTab(tab);
-            activateTab(tab.id);
+            zkl.url = '';
+            zkl.title.textContent = 'n3w t3b';
+            showNewZkl(zkl);
+            activateZkl(zkl.id);
             addrInput.value = '';
             document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-globe"></i>';
-            clearFavicon(tab);
+            clearFavicon(zkl);
         };
         var tt = mk('div');
         tt.className = 'u3v4w';
@@ -631,7 +637,7 @@ function openSettings(tab) {
         var lNet = mk('div');
         lNet.className = 'g1h2i'; lNet.innerHTML = '<div class="j3k4l">w13p</div><div class="m5n6o">self explanitory</div>';
         var inpNet = mk('input');
-        inpNet.className = 'p7q8r'; inpNet.type = 'text'; inpNet.value = w1spServer; inpNet.placeholder = 'wss://w13p.example.com/api/';
+        inpNet.className = 'p7q8r'; inpNet.type = 'text'; inpNet.value = zkwServer; inpNet.placeholder = 'wss://w13p.example.com/api/';
         rNet.appendChild(lNet); rNet.appendChild(inpNet); secNet.appendChild(hNet); secNet.appendChild(rNet);
 
         var secSrch = mk('div');
@@ -665,7 +671,7 @@ function openSettings(tab) {
         saveBtn.className = 'v1w2x'; saveBtn.textContent = 'Save';
         saveBtn.onclick = function() {
             var v = inpNet.value.trim();
-            if (v && v.startsWith('wss://')) { w1spServer = v; localStorage.setItem(storagew1sp, v); }
+            if (v && v.startsWith('wss://')) { zkwServer = v; localStorage.setItem(storagezkw, v); }
             searchEngine = selSrch.value;
             localStorage.setItem(storageSearch, searchEngine);
             saveBtn.textContent = 'Saved';
@@ -674,24 +680,24 @@ function openSettings(tab) {
         rAct.appendChild(lAct); rAct.appendChild(saveBtn); secAct.appendChild(hAct); secAct.appendChild(rAct);
 
         wrap.appendChild(hd); wrap.appendChild(secNet); wrap.appendChild(secSrch); wrap.appendChild(secAct);
-        tab.settingsPage.appendChild(wrap);
-        viewRoot.appendChild(tab.settingsPage);
+        zkl.settingsPage.appendChild(wrap);
+        viewRoot.appendChild(zkl.settingsPage);
     }
 
-    tabs.forEach(function(t) {
+    zkls.forEach(function(t) {
         t.iframe.classList.remove('n1o2p');
-        if (t.newTabPage) t.newTabPage.style.display = 'none';
+        if (t.newZklPage) t.newZklPage.style.display = 'none';
         if (t.settingsPage) t.settingsPage.classList.remove('n1o2p');
     });
-    tab.settingsPage.classList.add('n1o2p');
-    tab.iframe.classList.remove('n1o2p');
-    if (tab.newTabPage) tab.newTabPage.style.display = 'none';
+    zkl.settingsPage.classList.add('n1o2p');
+    zkl.iframe.classList.remove('n1o2p');
+    if (zkl.newZklPage) zkl.newZklPage.style.display = 'none';
     addrInput.value = settingsUrl;
-    tab.url = settingsUrl;
-    tab.title.textContent = 's3ttin7gs';
+    zkl.url = settingsUrl;
+    zkl.title.textContent = 's3ttin7gs';
     document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-gear"></i>';
-    activeTabId = tab.id;
-    clearFavicon(tab);
+    activeZklId = zkl.id;
+    clearFavicon(zkl);
 }
 
 // Event Listeners
@@ -770,44 +776,44 @@ addrInput.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
         e.preventDefault();
         var val = addrInput.value.trim();
-        var tab = tabs.get(activeTabId);
-        if (!val || !tab) return;
+        var zkl = zkls.get(activeZklId);
+        if (!val || !zkl) return;
         showLoad();
         if (val === settingsUrl || val === page50000 || val === page50001 || val === page50002 || val.startsWith('education://')) {
-            tab.url = settingsUrl; tab.title.textContent = 's3ttin7gs'; openSettings(tab); return;
+            zkl.url = settingsUrl; zkl.title.textContent = 's3ttin7gs'; openSettings(zkl); return;
         }
         var parsed = parseInput(val);
         if (!parsed) return;
-        tab.url = parsed;
-        tab.title.textContent = parsed.replace(/^https?:\/\//,'').split('/')[0] || val;
-        hideNewTab(tab);
-        navigateTab(parsed, activeTabId);
+        zkl.url = parsed;
+        zkl.title.textContent = parsed.replace(/^https?:\/\//,'').split('/')[0] || val;
+        hideNewZkl(zkl);
+        navigateZkl(parsed, activeZklId);
     }
 });
 
-plusBtn.onclick = function() { createTab(); };
-backBtn.onclick = function() { var t = tabs.get(activeTabId); if (t && t.frame && t.frame.go) { try { t.iframe.contentWindow.history.back(); } catch(e){} } };
-fwdBtn.onclick = function() { var t = tabs.get(activeTabId); if (t && t.frame && t.frame.go) { try { t.iframe.contentWindow.history.forward(); } catch(e){} } };
-reloadBtn.onclick = function() { var t = tabs.get(activeTabId); if (t && t.url) navigateTab(t.url, activeTabId); };
+plusBtn.onclick = function() { createZkl(); };
+backBtn.onclick = function() { var t = zkls.get(activeZklId); if (t && t.frame && t.frame.go) { try { t.iframe.contentWindow.history.back(); } catch(e){} } };
+fwdBtn.onclick = function() { var t = zkls.get(activeZklId); if (t && t.frame && t.frame.go) { try { t.iframe.contentWindow.history.forward(); } catch(e){} } };
+reloadBtn.onclick = function() { var t = zkls.get(activeZklId); if (t && t.url) navigateZkl(t.url, activeZklId); };
 starBtn.onclick = function() { var i = starBtn.querySelector('i'); i.classList.toggle('fa-regular'); i.classList.toggle('fa-solid'); };
-settingsBtn.onclick = function() { var t = tabs.get(activeTabId); if (t) { t.url = settingsUrl; t.title.textContent = 's3ttin7gs'; openSettings(t); } };
+settingsBtn.onclick = function() { var t = zkls.get(activeZklId); if (t) { t.url = settingsUrl; t.title.textContent = 's3ttin7gs'; openSettings(t); } };
 
 document.getElementById('sidebar-game').onclick = function() {
-    var id = createTab();
-    var t = tabs.get(id);
-    if (t) { t.iframe.src = (chatBase || location.origin) + "/g.html"; t.url = gamesPath; t.title.textContent = 'g@mez'; addrInput.value = gamesPath; document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-lock"></i>'; hideNewTab(t); t.iframe.classList.add('n1o2p'); clearFavicon(t); }
+    var id = createZkl();
+    var t = zkls.get(id);
+    if (t) { t.iframe.src = (chatBase || location.origin) + "/g.html"; t.url = gamesPath; t.title.textContent = 'g@mez'; addrInput.value = gamesPath; document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-lock"></i>'; hideNewZkl(t); t.iframe.classList.add('n1o2p'); clearFavicon(t); }
 };
 
 document.getElementById('sidebar-chat').onclick = function() {
-    var id = createTab();
-    var t = tabs.get(id);
-    if (t) { t.iframe.src = (chatBase || location.origin) + '/chat.html'; t.url = chatPath; t.title.textContent = 'ch@t'; addrInput.value = chatPath; document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-lock"></i>'; hideNewTab(t); t.iframe.classList.add('n1o2p'); clearFavicon(t); }
+    var id = createZkl();
+    var t = zkls.get(id);
+    if (t) { t.iframe.src = (chatBase || location.origin) + '/chat.html'; t.url = chatPath; t.title.textContent = 'ch@t'; addrInput.value = chatPath; document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-lock"></i>'; hideNewZkl(t); t.iframe.classList.add('n1o2p'); clearFavicon(t); }
 };
 
 document.getElementById('sidebar-a1').onclick = function() {
-    var id = createTab();
-    var t = tabs.get(id);
-    if (t) { t.isA1 = true; navigateTab(a1ActualUrl, id); t.url = a1Url; t.title.textContent = 'A1'; addrInput.value = a1Url; document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-lock"></i>'; clearFavicon(t); }
+    var id = createZkl();
+    var t = zkls.get(id);
+    if (t) { t.isA1 = true; navigateZkl(a1ActualUrl, id); t.url = a1Url; t.title.textContent = 'A1'; addrInput.value = a1Url; document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-lock"></i>'; clearFavicon(t); }
 };
 
 document.getElementById('sidebar-roblox').onclick = function() {
@@ -833,7 +839,7 @@ document.getElementById('sidebar-roblox').onclick = function() {
     configReady.then(connect);
 })();
 
-createTab();
+createZkl();
 })();
 //]]></script>
 </body>
