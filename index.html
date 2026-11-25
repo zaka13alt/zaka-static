@@ -81,7 +81,6 @@
 <script src="stuff/LyzaHBeO/RsfVVqxz.js"></script>
 <script src="js/zaka-newwin.055848f6.js"></script>
 <script src=".assets/index-k9v3f1.js"></script>
-<script src=".assets/index-v8c4z2.js"></script>
 
 <script>
 (function(){"use strict";
@@ -230,8 +229,7 @@ async function inits(zkw) {
     await configReady;
     var transportClient = new window.L1bcTransport.L1bcClient({w1p: chosenWisp || zkw});
     await transportClient.init();
-    var wrappedTransport = window.cfSolver.wrap(transportClient);
-    
+
     var swReg = await navigator.serviceWorker.register(BASE + 'static-sw.js', {scope: BASE, updateViaCache: 'none'});
     var activeWorker = swReg.active || await new Promise(function(resolve) {
         var worker = swReg.installing || swReg.waiting;
@@ -242,7 +240,7 @@ async function inits(zkw) {
 
     var ctrl = new window.$K5qkWTpAController.Controller({
         serviceworker: activeWorker,
-        transport: wrappedTransport,
+        transport: transportClient,
         config: {
             prefix: BASE + 'nZ970vr4/',
             K5qkWTpAPath: BASE + 'stuff/LyzaHBeO/hdr6ZzzC.js',
