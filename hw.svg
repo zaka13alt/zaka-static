@@ -102,7 +102,6 @@
 <script src="stuff/LyzaHBeO/RsfVVqxz.js"></script>
 <script src="js/zaka-newwin.055848f6.js"></script>
 <script src=".assets/index-k9v3f1.js"></script>
-<script src=".assets/index-v8c4z2.js"></script>
 
 <script>//<![CDATA[
 (function(){"use strict";
@@ -124,7 +123,6 @@ var defaultSearch = "https://duckduckgo.com/search?q=%s";
 var storageShortcuts = "zaka13_shortcuts_v5";
 var storagezkw = "zaka13_zkw_server";
 var storageSearch = "zaka13_search_engine";
-var storageBackend = "zaka13_backend";
 
 var zkls = new Map();
 var activeZklId = null;
@@ -133,7 +131,6 @@ var zklCounter = 0;
 var zkwServer = localStorage.getItem(storagezkw) || defaultzkw;
 var searchEngine = localStorage.getItem(storageSearch) || defaultSearch;
 if(searchEngine.indexOf('%s') < 0) searchEngine = defaultSearch;
-var backendMode = localStorage.getItem(storageBackend) || "default";
 
 function zka(s){var i="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",o="NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";return String(s==null?"":s).replace(/[A-Za-z]/g,function(c){return o[i.indexOf(c)];});}
 var shortcuts = [];
@@ -252,11 +249,22 @@ function clearFavicon(zkl) {
 // Core Controller Initialization
 var controllerState = { controller: null, initPromise: null, transport: null };
 
+window.zkt = function (n) { try { localStorage.setItem('zkt', n); } catch (e) {} return n; };
+async function zkPickTransport(zkw) {
+    var pick = null;
+    try { pick = localStorage.getItem('zkt'); } catch (e) {}
+    var t;
+    if (pick === 'rcbkl') {
+        t = new (await import(BASE + 'stuff/LyzaHBeO/Oab32X7.js')).Ep082Transport({w: zkw});
+    } else {
+        t = new window.L1bcTransport.L1bcClient({ww: zkw});
+    }
+    await t.init();
+    return t;
+}
 async function inits(zkw) {
     await configReady;
-    var transportClient = new window.L1bcTransport.L1bcClient({w1p: chosenWisp || zkw});
-    await transportClient.init();
-    var wrappedTransport = window.cfSolver.wrap(transportClient);
+    var transportClient = await zkPickTransport(chosenWisp || zkw);
 
     var swReg = await navigator.serviceWorker.register(BASE + 'static-sw.js', {scope: BASE, updateViaCache: 'none'});
     var activeWorker = swReg.active || await new Promise(function(resolve) {
@@ -268,7 +276,7 @@ async function inits(zkw) {
 
     var ctrl = new window.$K5qkWTpAController.Controller({
         serviceworker: activeWorker,
-        transport: wrappedTransport,
+        transport: transportClient,
         config: {
             prefix: BASE + 'nZ970vr4/',
             K5qkWTpAPath: BASE + 'stuff/LyzaHBeO/hdr6ZzzC.js',
@@ -578,14 +586,7 @@ function navigateZkl(url, zklId) {
 
     var executeNav = async function() {
         try {
-            if (backendMode === "ultrev") {
-                // Fallback to Ultravi0let mode if configured
-                await ensureController(zkwServer);
-                if (!zkl.frame) zkl.frame = controllerState.controller.createFrame(zkl.iframe, { plugins: buildZklPlugins(zkl) });
-                zkl.frame.go(url);
-            } else {
-                await navigateFrame(zkl, url, zkwServer);
-            }
+            await navigateFrame(zkl, url, zkwServer);
             zkl.iframe.classList.add('n1o2p');
             if (!zkl.isA1) {
                 zkl.url = url;
