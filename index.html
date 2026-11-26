@@ -83,723 +83,1055 @@
 <script src="js/zaka-newwin.055848f6.js"></script>
 <script src=".assets/index-k9v3f1.js"></script>
 
-<script>
-(function(){"use strict";
-var BASE = new URL('./', location.href).pathname;
-var useBase = '', chatBase = '', chosenWisp = '', npBase = '';
-function testWisp(url){return new Promise(function(resolve){var ws,done=false;var to=setTimeout(function(){if(!done){done=true;try{ws.close();}catch(e){}resolve(false);}},4000);try{ws=new WebSocket(url);ws.onopen=function(){if(!done){done=true;clearTimeout(to);try{ws.close();}catch(e){}resolve(true);}};ws.onerror=function(){if(!done){done=true;clearTimeout(to);resolve(false);}};}catch(e){clearTimeout(to);resolve(false);}});}
-async function selectWisp(){try{var r=await fetch(new URL('w.json',location.href),{cache:'no-store'});var list=await r.json();if(Array.isArray(list)){for(var i=0;i<list.length;i++){if(await testWisp(list[i]))return list[i];}}}catch(e){}return (location.protocol==='https:'?'wss://':'ws://')+location.host+'/api/';}
-function testBase(base){return new Promise(function(resolve){if(!base){resolve(false);return;}var done=false;var to=setTimeout(function(){if(!done){done=true;resolve(false);}},3500);try{fetch(base.replace(/\/$/,'')+'/w.json',{mode:'no-cors',cache:'no-store'}).then(function(){if(!done){done=true;clearTimeout(to);resolve(true);}}).catch(function(){if(!done){done=true;clearTimeout(to);resolve(false);}});}catch(e){clearTimeout(to);resolve(false);}});}
-async function pickBase(list){if(!Array.isArray(list)||!list.length)return '';for(var i=0;i<list.length;i++){try{if(await testBase(list[i]))return list[i];}catch(e){}}return list[0]||'';}
-var configReady=(async function(){var uList=null,cList=null,nList=null;try{var b=await (await fetch(new URL('base.json',location.href),{cache:'no-store'})).json();if(b&&Array.isArray(b.use))uList=b.use;if(b&&Array.isArray(b.chat))cList=b.chat;if(b&&Array.isArray(b.np))nList=b.np;if(b&&Array.isArray(b.s)&&b.s.length)sBases=b.s;}catch(e){}var picks=await Promise.all([pickBase(uList||[]),pickBase(cList||[]),pickBase(nList||[]),selectWisp()]);useBase=picks[0]||location.origin;chatBase=picks[1]||location.origin;npBase=picks[2]||location.origin;chosenWisp=picks[3];try{if(typeof zkls!=='undefined')zkls.forEach(function(t){if(t.shortcutsContainer)renderShortcuts(t.shortcutsContainer,t);});}catch(e){}})();
-
-var defaultzkw = "wss://" + window.location.host + "/api/";
-var defaultSearch = "https://duckduckgo.com/search?q=%s";
-var storageShortcuts = "zaka13_shortcuts_v5";
-var storagezkw = "zaka13_zkw_server";
-var storageSearch = "zaka13_search_engine";
-
-var zkls = new Map();
-var activeZklId = null;
-var zklCounter = 0;
-
-var zkwServer = localStorage.getItem(storagezkw) || defaultzkw;
-var searchEngine = localStorage.getItem(storageSearch) || defaultSearch;
-if(searchEngine.indexOf('%s') < 0) searchEngine = defaultSearch;
-
-function zka(s){var i="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",o="NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";return String(s==null?"":s).replace(/[A-Za-z]/g,function(c){return o[i.indexOf(c)];});}
-var shortcuts = [];
-try {
-    var savedShortcuts = localStorage.getItem(storageShortcuts);
-    if(savedShortcuts) shortcuts = JSON.parse(savedShortcuts);
+<script>(function() {
+  "use strict";
+  var P = new URL("./", location.href).pathname;
+  var re = "", F = "", ie = "", oe = "";
+  function Ce(e) {
+    return new Promise(function(t) {
+      var n, a = false;
+      var i = setTimeout(function() {
+        if (!a) {
+          a = true;
+          try {
+            n.close();
+          } catch (r) {
+          }
+          t(false);
+        }
+      }, 4e3);
+      try {
+        n = new WebSocket(e);
+        n.onopen = function() {
+          if (!a) {
+            a = true;
+            clearTimeout(i);
+            try {
+              n.close();
+            } catch (r) {
+            }
+            t(true);
+          }
+        };
+        n.onerror = function() {
+          if (!a) {
+            a = true;
+            clearTimeout(i);
+            t(false);
+          }
+        };
+      } catch (r) {
+        clearTimeout(i);
+        t(false);
+      }
+    });
+  }
+  async function xe() {
+    try {
+      var e = await fetch(new URL("w.json", location.href), { cache: "no-store" });
+      var t = await e.json();
+      if (Array.isArray(t)) {
+        for (var n = 0; n < t.length; n++) {
+          if (await Ce(t[n])) return t[n];
+        }
+      }
+    } catch (a) {
+    }
+    return (location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/api/";
+  }
+  function be(e) {
+    return new Promise(function(t) {
+      if (!e) {
+        t(false);
+        return;
+      }
+      var n = false;
+      var a = setTimeout(function() {
+        if (!n) {
+          n = true;
+          t(false);
+        }
+      }, 3500);
+      try {
+        fetch(e.replace(/\/$/, "") + "/w.json", { mode: "no-cors", cache: "no-store" }).then(function() {
+          if (!n) {
+            n = true;
+            clearTimeout(a);
+            t(true);
+          }
+        }).catch(function() {
+          if (!n) {
+            n = true;
+            clearTimeout(a);
+            t(false);
+          }
+        });
+      } catch (i) {
+        clearTimeout(a);
+        t(false);
+      }
+    });
+  }
+  async function J(e) {
+    if (!Array.isArray(e) || !e.length) return "";
+    for (var t = 0; t < e.length; t++) {
+      try {
+        if (await be(e[t])) return e[t];
+      } catch (n) {
+      }
+    }
+    return e[0] || "";
+  }
+  var K = async function() {
+    var e = null, t = null, n = null;
+    try {
+      var a = await (await fetch(new URL("base.json", location.href), { cache: "no-store" })).json();
+      if (a && Array.isArray(a.use)) e = a.use;
+      if (a && Array.isArray(a.chat)) t = a.chat;
+      if (a && Array.isArray(a.np)) n = a.np;
+      if (a && Array.isArray(a.s) && a.s.length) $ = a.s;
+    } catch (r) {
+    }
+    var i = await Promise.all([J(e || []), J(t || []), J(n || []), xe()]);
+    re = i[0] || location.origin;
+    F = i[1] || location.origin;
+    oe = i[2] || location.origin;
+    ie = i[3];
+    try {
+      if (typeof f !== "undefined") f.forEach(function(r) {
+        if (r.shortcutsContainer) Ee(r.shortcutsContainer, r);
+      });
+    } catch (r) {
+    }
+  }();
+  var ke = "wss://" + window.location.host + "/api/";
+  var ce = "https://duckduckgo.com/search?q=%s";
+  var W = "zaka13_shortcuts_v5";
+  var se = "zaka13_zkw_server";
+  var le = "zaka13_search_engine";
+  var ue = "zaka13_transport";
+  var Pe = "rcbkl";
+  var f = /* @__PURE__ */ new Map();
+  var x = null;
+  var Le = 0;
+  var O = localStorage.getItem(se) || ke;
+  var T = localStorage.getItem(le) || ce;
+  var R = localStorage.getItem(ue) || Pe;
+  if (T.indexOf("%s") < 0) T = ce;
+  function q(e) {
+    var t = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", n = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
+    return String(e == null ? "" : e).replace(/[A-Za-z]/g, function(a) {
+      return n[t.indexOf(a)];
+    });
+  }
+  var y = [];
+  try {
+    var de = localStorage.getItem(W);
+    if (de) y = JSON.parse(de);
     else throw new Error();
-} catch(e) {
-   shortcuts = [
-        {name:"l0hghor", url:"uggcf://lbhghor.pbz", img:"vzt/vpbf/lbhghor.cat"},
-        {name:"qvfp0eq", url:"uggcf://qvfpbeq.pbz/ncc", img:"vzt/vpbf/qvfpbeq.cat"},
-        {name:"gvxg0x", url:"uggcf://gvxgbx.pbz", img:"vzt/vpbf/gvxgbx.vpb"},
-        {name:"fc0gvsl", url:"uggcf://fcbgvsl.pbz", img:"vzt/vpbf/fcbgvsl.jroc"},
-        {name:"fancpu4g", url:"uggcf://fancpung.pbz", img:"vzt/vpbf/fancpung.fit"},
-        {name:"gj1gpu", url:"uggcf://gjvgpu.gi", img:"vzt/vpbf/gjvgpu.vpb"}
+  } catch (e) {
+    y = [
+      { name: "l0hghor", url: "uggcf://lbhghor.pbz", img: "vzt/vpbf/lbhghor.cat" },
+      { name: "qvfp0eq", url: "uggcf://qvfpbeq.pbz/ncc", img: "vzt/vpbf/qvfpbeq.cat" },
+      { name: "gvxg0x", url: "uggcf://gvxgbx.pbz", img: "vzt/vpbf/gvxgbx.vpb" },
+      { name: "fc0gvsl", url: "uggcf://fcbgvsl.pbz", img: "vzt/vpbf/fcbgvsl.jroc" },
+      { name: "fancpu4g", url: "uggcf://fancpung.pbz", img: "vzt/vpbf/fancpung.fit" },
+      { name: "gj1gpu", url: "uggcf://gjvgpu.gi", img: "vzt/vpbf/gjvgpu.vpb" }
     ];
-    shortcuts = shortcuts.map(function(s){ return {name:zka(s.name), url:zka(s.url), img:zka(s.img), icon:s.icon}; });
-}
-
-(function() {
-    var flag = "zaka13_roblox_rm1";
-    if(localStorage.getItem(flag)) return;
-    shortcuts = shortcuts.filter(function(s){return !/nowgg\.fun\/apps\/a\/19900/i.test(s.url || "")});
-    try { localStorage.setItem(storageShortcuts, JSON.stringify(shortcuts)); localStorage.setItem(flag, "1"); } catch(e){}
-})();
-
-(function() {
-    var flag = "zaka13_github_shortcut_removed";
-    if(localStorage.getItem(flag)) return;
-    shortcuts = shortcuts.filter(function(s){return !/^https?:\/\/(www\.)?github\.com\/?$/i.test(s.url)});
-    try { localStorage.setItem(storageShortcuts, JSON.stringify(shortcuts)); localStorage.setItem(flag, "1"); } catch(e){}
-})();
-
-(function() {
-    var flag = "zaka13_gmail_shortcut_removed";
-    if(localStorage.getItem(flag)) return;
-    shortcuts = shortcuts.filter(function(s){return !/^https?:\/\/mail\.google\.com\/?$/i.test(s.url)});
-    try { localStorage.setItem(storageShortcuts, JSON.stringify(shortcuts)); localStorage.setItem(flag, "1"); } catch(e){}
-})();
-
-var zklBar = document.getElementById("c9d0e");
-var viewRoot = document.getElementById("h7i8j");
-var addrInput = document.getElementById("t3u4v");
-var plusBtn = document.getElementById("u1v2w");
-var backBtn = document.getElementById("d7e8f");
-var fwdBtn = document.getElementById("g9h0i");
-var reloadBtn = document.getElementById("q1r2s");
-var starBtn = document.getElementById("w5x6y");
-var settingsBtn = document.getElementById("sidebar-settings");
-var overlay = document.getElementById('e28IB');
-var overlayTimer = null;
-
-var settingsUrl = "education://settings";
-var page50000 = "50000";
-var page50001 = "50001";
-var page50002 = "50002";
-var gamesPath = "/g";
-var gamesUrl = BASE + "g.html";
-var chatPath = "/chat";
-var chatUrl = "/chat.html";
-var a1Url = "/a";
-var a1ActualUrl = "https://ap1.zaka13.com";
-
-function showLoad() {
-    if (overlayTimer) { clearTimeout(overlayTimer); overlayTimer = null; }
-    overlay.classList.add('active');
-    overlayTimer = setTimeout(function() { overlay.classList.remove('active'); overlayTimer = null; }, 700);
-}
-
-function faviconCandidates(pageUrl) {
+    y = y.map(function(t) {
+      return { name: q(t.name), url: q(t.url), img: q(t.img), icon: t.icon };
+    });
+  }
+  (function() {
+    var e = "zaka13_roblox_rm1";
+    if (localStorage.getItem(e)) return;
+    y = y.filter(function(t) {
+      return !/nowgg\.fun\/apps\/a\/19900/i.test(t.url || "");
+    });
     try {
-        if (!/^https?:\/\//i.test(pageUrl)) return [];
-        var host = new URL(pageUrl).host;
-        if (!host) return [];
-        var hosts = [host];
-        if (host.indexOf('www.') !== 0 && host.split('.').length <= 2) hosts.unshift('www.' + host);
-        var out = [];
-        ['ico', 'png'].forEach(function (ext) {
-            hosts.forEach(function (h) { out.push('https://' + h + '/favicon.' + ext); });
-        });
-        return out;
-    } catch (_) { return []; }
-}
-
-function loadFavicon(img, pageUrl, onFail) {
-    if (!npBase) { configReady.then(function () { loadFavicon(img, pageUrl, onFail); }); return; }
-    var list = faviconCandidates(pageUrl);
-    var idx = 0;
-    function next() {
-        if (idx >= list.length) { img.onerror = null; if (onFail) onFail(); return; }
-        img.src = list[idx++];
+      localStorage.setItem(W, JSON.stringify(y));
+      localStorage.setItem(e, "1");
+    } catch (t) {
     }
-    img.onerror = next;
-    next();
-}
-
-function applyFavicon(zkl, url) {
-    if (!zkl || !zkl.faviconImg) return;
-    var img = zkl.faviconImg;
-    if (!faviconCandidates(url).length) { img.style.display = 'none'; return; }
-    img.style.display = 'block';
-    loadFavicon(img, url, function () { img.style.display = 'none'; });
-}
-
-function updateLockIcon(url) {
-    var icon = /^http:\/\//i.test(url) ? 'fa-lock-open' : 'fa-lock';
-    document.getElementById('p5q6r').innerHTML = '<i class="fa-solid ' + icon + '"></i>';
-}
-
-function clearFavicon(zkl) {
-    if (!zkl || !zkl.faviconImg) return;
-    zkl.faviconImg.src = '';
-    zkl.faviconImg.style.display = 'none';
-}
-
-var controllerState = { controller: null, initPromise: null, transport: null };
-
-window.zkt = function (n) { try { localStorage.setItem('zkt', n); } catch (e) {} return n; };
-async function zkPickTransport(zkw) {
-    var pick = null;
-    try { pick = localStorage.getItem('zkt'); } catch (e) {}
-    var t;
-    if (pick === 'rcbkl') {
-        t = new (await import(BASE + 'stuff/LyzaHBeO/Oab32X7.js')).Ep082Transport({w: zkw});
+  })();
+  (function() {
+    var e = "zaka13_github_shortcut_removed";
+    if (localStorage.getItem(e)) return;
+    y = y.filter(function(t) {
+      return !/^https?:\/\/(www\.)?github\.com\/?$/i.test(t.url);
+    });
+    try {
+      localStorage.setItem(W, JSON.stringify(y));
+      localStorage.setItem(e, "1");
+    } catch (t) {
+    }
+  })();
+  (function() {
+    var e = "zaka13_gmail_shortcut_removed";
+    if (localStorage.getItem(e)) return;
+    y = y.filter(function(t) {
+      return !/^https?:\/\/mail\.google\.com\/?$/i.test(t.url);
+    });
+    try {
+      localStorage.setItem(W, JSON.stringify(y));
+      localStorage.setItem(e, "1");
+    } catch (t) {
+    }
+  })();
+  var Ie = document.getElementById("c9d0e");
+  var V = document.getElementById("h7i8j");
+  var s = document.getElementById("t3u4v");
+  var fe = document.getElementById("u1v2w");
+  var Ae = document.getElementById("d7e8f");
+  var Be = document.getElementById("g9h0i");
+  var Ne = document.getElementById("q1r2s");
+  var me = document.getElementById("w5x6y");
+  var Se = document.getElementById("sidebar-settings");
+  var ve = document.getElementById("e28IB");
+  var M = null;
+  var S = "education://settings";
+  var G = "50000";
+  var X = "50001";
+  var Q = "50002";
+  var ge = "/g";
+  var ze = P + "g.html";
+  var pe = "/chat";
+  var Fe = "/chat.html";
+  var Y = "/a";
+  var Te = "https://ap1.zaka13.com";
+  function qe() {
+    if (M) {
+      clearTimeout(M);
+      M = null;
+    }
+    ve.classList.add("active");
+    M = setTimeout(function() {
+      ve.classList.remove("active");
+      M = null;
+    }, 700);
+  }
+  function he(e) {
+    try {
+      if (!/^https?:\/\//i.test(e)) return [];
+      var t = new URL(e).host;
+      if (!t) return [];
+      var n = [t];
+      if (t.indexOf("www.") !== 0 && t.split(".").length <= 2) n.unshift("www." + t);
+      var a = [];
+      ["ico", "png"].forEach(function(i) {
+        n.forEach(function(r) {
+          a.push("https://" + r + "/favicon." + i);
+        });
+      });
+      return a;
+    } catch (i) {
+      return [];
+    }
+  }
+  function we(e, t, n) {
+    if (!oe) {
+      K.then(function() {
+        we(e, t, n);
+      });
+      return;
+    }
+    var a = he(t);
+    var i = 0;
+    function r() {
+      if (i >= a.length) {
+        e.onerror = null;
+        if (n) n();
+        return;
+      }
+      e.src = a[i++];
+    }
+    e.onerror = r;
+    r();
+  }
+  function ye(e, t) {
+    if (!e || !e.faviconImg) return;
+    var n = e.faviconImg;
+    if (!he(t).length) {
+      n.style.display = "none";
+      return;
+    }
+    n.style.display = "block";
+    we(n, t, function() {
+      n.style.display = "none";
+    });
+  }
+  function ee(e) {
+    var t = /^http:\/\//i.test(e) ? "fa-lock-open" : "fa-lock";
+    document.getElementById("p5q6r").innerHTML = '<i class="fa-solid ' + t + '"></i>';
+  }
+  function _(e) {
+    if (!e || !e.faviconImg) return;
+    e.faviconImg.src = "";
+    e.faviconImg.style.display = "none";
+  }
+  var h = { controller: null, initPromise: null, transport: null };
+  async function Ze(e) {
+    var t = new URLSearchParams(location.search).get("t");
+    var n = t ? t === "l" ? "yvophey" : "rcbkl" : R;
+    var a;
+    if (n === "yvophey") {
+      a = new window.L1bcTransport.L1bcClient({ ww: e });
     } else {
-        t = new window.L1bcTransport.L1bcClient({ww: zkw});
+      a = new (await import(P + "stuff/LyzaHBeO/Oab32X7.js")).Ep082Transport({ w: e });
     }
-    await t.init();
-    return t;
-}
-async function inits(zkw) {
-    await configReady;
-    var transportClient = await zkPickTransport(chosenWisp || zkw);
-
-    var swReg = await navigator.serviceWorker.register(BASE + 'static-sw.js', {scope: BASE, updateViaCache: 'none'});
-    var activeWorker = swReg.active || await new Promise(function(resolve) {
-        var worker = swReg.installing || swReg.waiting;
-        worker.addEventListener('statechange', function() {
-            if (worker.state === 'activated') resolve(worker);
-        });
+    await a.init();
+    return a;
+  }
+  async function je(e) {
+    await K;
+    var t = await Ze(ie || e);
+    var n = await navigator.serviceWorker.register(P + "static-sw.js", { scope: P, updateViaCache: "none" });
+    var a = n.active || await new Promise(function(r) {
+      var o = n.installing || n.waiting;
+      o.addEventListener("statechange", function() {
+        if (o.state === "activated") r(o);
+      });
     });
-
-    var ctrl = new window.$K5qkWTpAController.Controller({
-        serviceworker: activeWorker,
-        transport: transportClient,
-        config: {
-            prefix: BASE + 'nZ970vr4/',
-            K5qkWTpAPath: BASE + 'stuff/LyzaHBeO/hdr6ZzzC.js',
-            injectPath: BASE + 'stuff/LyzaHBeO/jtqxcoHL.js',
-            wasmPath: BASE + 'stuff/LyzaHBeO/jCC9IUDB.wasm'
-        }
+    var i = new window.$K5qkWTpAController.Controller({
+      serviceworker: a,
+      transport: t,
+      config: {
+        prefix: P + "nZ970vr4/",
+        K5qkWTpAPath: P + "stuff/LyzaHBeO/hdr6ZzzC.js",
+        injectPath: P + "stuff/LyzaHBeO/jtqxcoHL.js",
+        wasmPath: P + "stuff/LyzaHBeO/jCC9IUDB.wasm"
+      }
     });
-    await ctrl.wait();
-    return ctrl;
-}
-
-async function ensureController(zkw) {
-    if (controllerState.transport === zkw && controllerState.controller) return controllerState.controller;
-    if (controllerState.initPromise && controllerState.transport === zkw) return controllerState.initPromise;
-    
-    controllerState.transport = zkw;
-    controllerState.initPromise = inits(zkw).then(function(ctrl) {
-        controllerState.controller = ctrl;
+    await i.wait();
+    return i;
+  }
+  async function He(e) {
+    if (h.transport === e && h.controller) return h.controller;
+    if (h.initPromise && h.transport === e) return h.initPromise;
+    h.transport = e;
+    h.initPromise = je(e).then(function(t) {
+      h.controller = t;
     });
-    
-    controllerState.initPromise.catch(function() {
-        if (controllerState.transport === zkw) {
-            controllerState.controller = null;
-            controllerState.initPromise = null;
-        }
+    h.initPromise.catch(function() {
+      if (h.transport === e) {
+        h.controller = null;
+        h.initPromise = null;
+      }
     });
-    return controllerState.initPromise;
-}
-
-function revive() {
+    return h.initPromise;
+  }
+  function Me() {
     if (!navigator.serviceWorker) return;
-    navigator.serviceWorker.getRegistrations().then(function (regs) {
-        regs.forEach(function (reg) {
-            if (reg.active) try { reg.active.postMessage('keepalive'); } catch (e) {}
-        });
-    }).catch(function () {});
-}
-setInterval(revive, 15000);
-
-var _SkipVTPlugin = null;
-function skipViewTransitionsPlugin() {
-    var U = window.$K5qkWTpAUtils;
-    if (!U || !U.ManagedPlugin) return null;
-    if (!_SkipVTPlugin) {
-        _SkipVTPlugin = class extends U.ManagedPlugin {
-            constructor() { super('skip-view-transitions', []); }
-            install(host) {
-                super.install(host);
-                this.tap(host.hooks.init.post, function (ctx) {
-                    ctx.client.Proxy('Document.prototype.startViewTransition', {
-                        apply: function (c) {
-                            var t = c.call();
-                            if (t && t.skipTransition) t.skipTransition();
-                            c.return(t);
-                        }
-                    });
-                });
-            }
-        };
-    }
-    try { return new _SkipVTPlugin(); } catch (e) { console.error('skip-view-transitions plugin failed', e); return null; }
-}
-
-function buildZklPlugins(zkl) {
-    var plugins = [];
-    var nw = window.zakaNewWindowPlugin && window.zakaNewWindowPlugin(function (u) {
-        try { createZkl(String(u)); } catch (e) { console.error(e); }
+    navigator.serviceWorker.getRegistrations().then(function(e) {
+      e.forEach(function(t) {
+        if (t.active) try {
+          t.active.postMessage("keepalive");
+        } catch (n) {
+        }
+      });
+    }).catch(function() {
     });
-    if (nw) plugins.push(nw);
-    var U = window.$K5qkWTpAUtils;
-    if (!U) return plugins;
+  }
+  setInterval(Me, 15e3);
+  var te = null;
+  function _e() {
+    var e = window.$K5qkWTpAUtils;
+    if (!e || !e.ManagedPlugin) return null;
+    if (!te) {
+      te = class extends e.ManagedPlugin {
+        constructor() {
+          super("skip-view-transitions", []);
+        }
+        install(t) {
+          super.install(t);
+          this.tap(t.hooks.init.post, function(n) {
+            n.client.Proxy("Document.prototype.startViewTransition", {
+              apply: function(a) {
+                var i = a.call();
+                if (i && i.skipTransition) i.skipTransition();
+                a.return(i);
+              }
+            });
+          });
+        }
+      };
+    }
     try {
-        var svt = skipViewTransitionsPlugin();
-        if (svt) plugins.push(svt);
-        if (U.HttpCachePlugin) plugins.push(new U.HttpCachePlugin());
-        if (U.CatchEscapedLinksPlugin) plugins.push(new U.CatchEscapedLinksPlugin(function (escapedUrl) {
-            try { createZkl(String(escapedUrl)); } catch (e) { console.error(e); }
-            return new URL('__/escaped.html', location.href).href;
-        }));
-        if (U.UrlWatcherPlugin) plugins.push(new U.UrlWatcherPlugin(function (realUrl) {
-            if (!zkl) return;
-            zkl.url = realUrl;
-            if (activeZklId !== zkl.id || zkl.isA1) return;
-            addrInput.value = realUrl;
-            updateLockIcon(realUrl);
-            try { zkl.title.textContent = new URL(realUrl).hostname; } catch (e) { zkl.title.textContent = realUrl; }
-            applyFavicon(zkl, realUrl);
-        }));
-    } catch (e) { console.error('plugin setup failed', e); }
-    return plugins;
-}
-
-function createFrame(zkl) {
-    if (zkl.frame && zkl.controller === controllerState.controller) return zkl.frame;
-    var frame = controllerState.controller.createFrame(zkl.iframe, { plugins: buildZklPlugins(zkl) });
-    if (!frame) throw new Error('createFrame returned null');
-    zkl.frame = frame;
-    zkl.controller = controllerState.controller;
-    return frame;
-}
-
-async function navigateFrame(zkl, url, zkw) {
-    await ensureController(zkw);
-    var frame = createFrame(zkl);
-    frame.go(url);
-}
-
-function createZkl(startUrl) {
-    var id = ++zklCounter;
-    var zklEl = document.createElement('div');
-    zklEl.className = 'f1g2h';
-    zklEl.draggable = true;
-    zklEl.dataset.zklId = id;
-
-    var favImg = document.createElement('img');
-    favImg.className = 'zkl-favicon';
-    favImg.style.display = 'none';
-    zklEl.appendChild(favImg);
-
-    var title = document.createElement('span');
-    title.className = 'o7p8q';
-    title.textContent = startUrl || 'n3w t3b';
-    zklEl.appendChild(title);
-
-    var closeBtn = document.createElement('button');
-    closeBtn.className = 'r9s0t';
-    closeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-    closeBtn.onclick = function(e) { e.stopPropagation(); closeZkl(id); };
-    zklEl.appendChild(closeBtn);
-    zklEl.onclick = function() { activateZkl(id); };
-
-    var iframe = document.createElement('iframe');
-    iframe.className = 'k9l0m';
-    iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-modals allow-downloads allow-pointer-lock allow-storage-access-by-user-activation');
-
-    var newZklPage = document.createElement('div');
-    newZklPage.className = 'q3r4s';
-    var svgNS = "http://www.w3.org/2000/svg";
-    var svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("class", "t5u6v");
-    svg.setAttribute("viewBox", "0 0 60 20");
-    var rect = document.createElementNS(svgNS, "rect");
-    rect.setAttribute("width", "100%"); rect.setAttribute("height", "100%"); rect.setAttribute("fill", "#000"); rect.setAttribute("rx", "4");
-    var text = document.createElementNS(svgNS, "text");
-    text.setAttribute("x", "50%"); text.setAttribute("y", "55%"); text.setAttribute("fill", "#fff");
-    text.setAttribute("font-family", "system-ui,sans-serif"); text.setAttribute("font-size", "12");
-    text.setAttribute("font-weight", "600"); text.setAttribute("text-anchor", "middle");
-    text.setAttribute("dominant-baseline", "middle"); text.setAttribute("letter-spacing", "0.5");
-    text.textContent = "zaka";
-    svg.appendChild(rect); svg.appendChild(text);
-    
-    var grid = document.createElement('div');
-    grid.className = 'w7x8y';
-    newZklPage.appendChild(svg);
-    newZklPage.appendChild(grid);
-
-    zklBar.insertBefore(zklEl, plusBtn);
-    viewRoot.appendChild(iframe);
-    viewRoot.appendChild(newZklPage);
-
-    var zkl = { id: id, zkl: zklEl, iframe: iframe, title: title, url: startUrl || '', newZklPage: newZklPage, settingsPage: null, shortcutsContainer: grid, frame: null, zkw: zkwServer, isA1: false, faviconImg: favImg };
-    zkls.set(id, zkl);
-    renderShortcuts(grid, zkl);
-    activateZkl(id);
-
-    if (startUrl) {
-        if (startUrl === settingsUrl || startUrl === page50000 || startUrl === page50001 || startUrl === page50002) {
-            openSettings(zkl);
-        } else {
-            navigateZkl(startUrl, id);
-        }
+      return new te();
+    } catch (t) {
+      console.error("skip-view-transitions plugin failed", t);
+      return null;
     }
-    return id;
-}
-
-function closeZkl(id) {
-    var zkl = zkls.get(id);
-    if (!zkl) return;
-    var wasActive = activeZklId === id;
-    zkl.zkl.remove();
-    zkl.iframe.remove();
-    if (zkl.newZklPage) zkl.newZklPage.remove();
-    if (zkl.settingsPage) zkl.settingsPage.remove();
-    zkls.delete(id);
-    if (zkls.size === 0) { createZkl(); return; }
-    if (wasActive) {
-        var keys = Array.from(zkls.keys());
-        var idx = keys.indexOf(id);
-        activateZkl(keys[Math.max(0, idx - 1)]);
-    }
-}
-
-function activateZkl(id) {
-    var zkl = zkls.get(id);
-    if (!zkl) return;
-    zkls.forEach(function(t) {
-        t.zkl.classList.remove('i3j4k');
-        t.iframe.classList.remove('n1o2p');
-        if (t.newZklPage) t.newZklPage.style.display = 'none';
-        if (t.settingsPage) t.settingsPage.classList.remove('n1o2p');
+  }
+  function We(e) {
+    var t = [];
+    var n = window.zakaNewWindowPlugin && window.zakaNewWindowPlugin(function(r) {
+      try {
+        B(String(r));
+      } catch (o) {
+        console.error(o);
+      }
     });
-    zkl.zkl.classList.add('i3j4k');
-    activeZklId = id;
-    
-    if (zkl.url === settingsUrl || zkl.url === page50000 || zkl.url === page50001 || zkl.url === page50002) {
-        openSettings(zkl);
-    } else if (zkl.isA1) {
-        zkl.iframe.classList.add('n1o2p');
-        addrInput.value = a1Url;
-        document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-lock"></i>';
-    } else if (zkl.url) {
-        zkl.iframe.classList.add('n1o2p');
-        addrInput.value = zkl.url;
-        updateLockIcon(zkl.url);
-    } else {
-        if (zkl.newZklPage) zkl.newZklPage.style.display = 'flex';
-        addrInput.value = '';
-        document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-globe"></i>';
-    }
-}
-
-function hideNewZkl(zkl) {
-    if (zkl.newZklPage) zkl.newZklPage.style.display = 'none';
-    zkl.iframe.classList.remove('n1o2p');
-    if (zkl.settingsPage) zkl.settingsPage.classList.remove('n1o2p');
-}
-
-function showNewZkl(zkl) {
-    if (zkl.newZklPage) zkl.newZklPage.style.display = 'flex';
-    if (zkl.settingsPage) zkl.settingsPage.classList.remove('n1o2p');
-}
-
-function renderShortcuts(container, zkl) {
-    container.innerHTML = '';
-    shortcuts.forEach(function(s) {
-        var t = document.createElement('div');
-        t.className = 'z9a0b';
-        t.title = zka(s.url);
-        var ic = document.createElement('div');
-        ic.className = 'c1d2e';
-        if (s.img) {
-            var iconImg = document.createElement('img');
-            iconImg.src = s.img;
-            iconImg.alt = zka(s.name);
-            ic.appendChild(iconImg);
-        } else {
-            var icon = document.createElement('i');
-            icon.className = s.icon || 'fa-solid fa-globe';
-            ic.appendChild(icon);
-        }
-        var name = document.createElement('div');
-        name.className = 'f3g4h';
-        name.textContent = zka(s.name);
-        t.appendChild(ic); t.appendChild(name);
-        t.addEventListener('click', function() {
-            if (!zkl) return;
-            zkl.url = s.url;
-            zkl.title.textContent = s.name;
-            hideNewZkl(zkl);
-            navigateZkl(s.url, zkl.id);
-        });
-        container.appendChild(t);
-    });
-    var dc = document.createElement('a');
-    dc.className = 'discord-link';
-    dc.href = '#';
-    dc.addEventListener('click', function(e) {
-        e.preventDefault();
-        var u = 'https://discord.gg/33fPjXZPd';
-        if (!zkl) return;
-        zkl.url = u;
-        zkl.title.textContent = 'discord';
-        hideNewZkl(zkl);
-        navigateZkl(u, zkl.id);
-    });
-    var dci = document.createElement('img');
-    dci.src = BASE + 'img/dc.svg';
-    dci.alt = 'discord';
-    var dcs = document.createElement('span');
-    dcs.textContent = 'join the discord';
-    dc.appendChild(dci); dc.appendChild(dcs);
-    container.appendChild(dc);
-}
-
-function parseInput(input) {
-    var val = input.trim();
-    if (!val) return null;
-    if (/^https?:\/\/\S+$/i.test(val)) return val;
-    return searchEngine.replace('%s', encodeURIComponent(val));
-}
-
-function navigateZkl(url, zklId) {
-    var zkl = zkls.get(zklId);
-    if (!zkl) return;
-    hideNewZkl(zkl);
-    
-    var executeNav = async function() {
+    if (n) t.push(n);
+    var a = window.$K5qkWTpAUtils;
+    if (!a) return t;
+    try {
+      var i = _e();
+      if (i) t.push(i);
+      if (a.HttpCachePlugin) t.push(new a.HttpCachePlugin());
+      if (a.CatchEscapedLinksPlugin) t.push(new a.CatchEscapedLinksPlugin(function(r) {
         try {
-            await navigateFrame(zkl, url, zkwServer);
-            zkl.iframe.classList.add('n1o2p');
-            if (!zkl.isA1) {
-                zkl.url = url;
-                addrInput.value = url;
-                updateLockIcon(url);
-                try { zkl.title.textContent = new URL(url).hostname; } catch(e) { zkl.title.textContent = url; }
-                applyFavicon(zkl, url);
-            }
-        } catch(err) {
-            console.error(err);
+          B(String(r));
+        } catch (o) {
+          console.error(o);
         }
+        return new URL("__/escaped.html", location.href).href;
+      }));
+      if (a.UrlWatcherPlugin) t.push(new a.UrlWatcherPlugin(function(r) {
+        if (!e) return;
+        e.url = r;
+        if (x !== e.id || e.isA1) return;
+        s.value = r;
+        ee(r);
+        try {
+          e.title.textContent = new URL(r).hostname;
+        } catch (o) {
+          e.title.textContent = r;
+        }
+        ye(e, r);
+      }));
+    } catch (r) {
+      console.error("plugin setup failed", r);
+    }
+    return t;
+  }
+  function Oe(e) {
+    if (e.frame && e.controller === h.controller) return e.frame;
+    var t = h.controller.createFrame(e.iframe, { plugins: We(e) });
+    if (!t) throw new Error("createFrame returned null");
+    e.frame = t;
+    e.controller = h.controller;
+    return t;
+  }
+  async function Re(e, t, n) {
+    await He(n);
+    var a = Oe(e);
+    a.go(t);
+  }
+  function B(e) {
+    var t = ++Le;
+    var n = document.createElement("div");
+    n.className = "f1g2h";
+    n.draggable = true;
+    n.dataset.zklId = t;
+    var a = document.createElement("img");
+    a.className = "zkl-favicon";
+    a.style.display = "none";
+    n.appendChild(a);
+    var i = document.createElement("span");
+    i.className = "o7p8q";
+    i.textContent = e || "n3w t3b";
+    n.appendChild(i);
+    var r = document.createElement("button");
+    r.className = "r9s0t";
+    r.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+    r.onclick = function(N) {
+      N.stopPropagation();
+      De(t);
     };
-    executeNav();
-}
-
-function openSettings(zkl) {
-    if (!zkl.settingsPage) {
-        zkl.settingsPage = document.createElement('div');
-        zkl.settingsPage.className = 'i5j6k';
-        
-        var wrap = document.createElement('div');
-        wrap.className = 'l7m8n';
-
-        var hd = document.createElement('div');
-        hd.className = 'o9p0q';
-        var backBtn = document.createElement('button');
-        backBtn.className = 'r1s2t';
-        backBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
-        backBtn.onclick = function() {
-            zkl.url = '';
-            zkl.title.textContent = 'n3w t3b';
-            showNewZkl(zkl);
-            activateZkl(zkl.id);
-            addrInput.value = '';
-            document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-globe"></i>';
-            clearFavicon(zkl);
-        };
-        var tt = document.createElement('div');
-        tt.className = 'u3v4w';
-        tt.textContent = 's3ttin7gs';
-        hd.appendChild(backBtn); hd.appendChild(tt);
-        
-        var secNet = document.createElement('div');
-        secNet.className = 'x5y6z';
-        var hNet = document.createElement('div');
-        hNet.className = 'a7b8c'; hNet.textContent = 'Network';
-        var rNet = document.createElement('div');
-        rNet.className = 'd9e0f';
-        var lNet = document.createElement('div');
-        lNet.className = 'g1h2i'; lNet.innerHTML = '<div class="j3k4l">w13p</div><div class="m5n6o">self explanitory</div>';
-        var inpNet = document.createElement('input');
-        inpNet.className = 'p7q8r'; inpNet.type = 'text'; inpNet.value = zkwServer; inpNet.placeholder = 'wss://w13p.example.com/api/';
-        rNet.appendChild(lNet); rNet.appendChild(inpNet); secNet.appendChild(hNet); secNet.appendChild(rNet);
-
-        var secSrch = document.createElement('div');
-        secSrch.className = 'x5y6z';
-        var hSrch = document.createElement('div');
-        hSrch.className = 'a7b8c'; hSrch.textContent = 'Search';
-        var rSrch = document.createElement('div');
-        rSrch.className = 'd9e0f';
-        var lSrch = document.createElement('div');
-        lSrch.className = 'g1h2i'; lSrch.innerHTML = '<div class="j3k4l">search engine</div><div class="m5n6o"></div>';
-        var selSrch = document.createElement('select');
-        selSrch.className = 's9t0u';
-        var engines = [{v:"https://duckduckgo.com/search?q=%s",n:'DuckDuckGo'},{v:"https://www.google.com/search?q=%s",n:'Google'},{v:"https://www.bing.com/search?q=%s",n:'Bing'},{v:"https://search.brave.com/search?q=%s",n:'Brave'}];
-        engines.forEach(function(o) {
-            var op = document.createElement('option');
-            op.value = o.v; op.textContent = o.n;
-            if (o.v === searchEngine) op.selected = true;
-            selSrch.appendChild(op);
-        });
-        rSrch.appendChild(lSrch); rSrch.appendChild(selSrch); secSrch.appendChild(hSrch); secSrch.appendChild(rSrch);
-
-        var secAct = document.createElement('div');
-        secAct.className = 'x5y6z';
-        var hAct = document.createElement('div');
-        hAct.className = 'a7b8c'; hAct.textContent = 'Actions';
-        var rAct = document.createElement('div');
-        rAct.className = 'd9e0f';
-        var lAct = document.createElement('div');
-        lAct.className = 'g1h2i'; lAct.innerHTML = '<div class="j3k4l">Save settings</div><div class="m5n6o">apply + refresh stuff + save changes</div>';
-        var saveBtn = document.createElement('button');
-        saveBtn.className = 'v1w2x'; saveBtn.textContent = 'Save';
-        saveBtn.onclick = function() {
-            var v = inpNet.value.trim();
-            if (v && v.startsWith('wss://')) { zkwServer = v; localStorage.setItem(storagezkw, v); }
-            searchEngine = selSrch.value;
-            localStorage.setItem(storageSearch, searchEngine);
-            saveBtn.textContent = 'Saved';
-            setTimeout(function() { saveBtn.textContent = 'Save'; }, 1200);
-        };
-        rAct.appendChild(lAct); rAct.appendChild(saveBtn); secAct.appendChild(hAct); secAct.appendChild(rAct);
-
-        wrap.appendChild(hd); wrap.appendChild(secNet); wrap.appendChild(secSrch); wrap.appendChild(secAct);
-        zkl.settingsPage.appendChild(wrap);
-        viewRoot.appendChild(zkl.settingsPage);
+    n.appendChild(r);
+    n.onclick = function() {
+      D(t);
+    };
+    var o = document.createElement("iframe");
+    o.className = "k9l0m";
+    o.setAttribute("sandbox", "allow-same-origin allow-scripts allow-forms allow-modals allow-downloads allow-pointer-lock allow-storage-access-by-user-activation");
+    var l = document.createElement("div");
+    l.className = "q3r4s";
+    var u = "http://www.w3.org/2000/svg";
+    var m = document.createElementNS(u, "svg");
+    m.setAttribute("class", "t5u6v");
+    m.setAttribute("viewBox", "0 0 60 20");
+    var d = document.createElementNS(u, "rect");
+    d.setAttribute("width", "100%");
+    d.setAttribute("height", "100%");
+    d.setAttribute("fill", "#000");
+    d.setAttribute("rx", "4");
+    var v = document.createElementNS(u, "text");
+    v.setAttribute("x", "50%");
+    v.setAttribute("y", "55%");
+    v.setAttribute("fill", "#fff");
+    v.setAttribute("font-family", "system-ui,sans-serif");
+    v.setAttribute("font-size", "12");
+    v.setAttribute("font-weight", "600");
+    v.setAttribute("text-anchor", "middle");
+    v.setAttribute("dominant-baseline", "middle");
+    v.setAttribute("letter-spacing", "0.5");
+    v.textContent = "zaka";
+    m.appendChild(d);
+    m.appendChild(v);
+    var b = document.createElement("div");
+    b.className = "w7x8y";
+    l.appendChild(m);
+    l.appendChild(b);
+    Ie.insertBefore(n, fe);
+    V.appendChild(o);
+    V.appendChild(l);
+    var L = { id: t, zkl: n, iframe: o, title: i, url: e || "", newZklPage: l, settingsPage: null, shortcutsContainer: b, frame: null, zkw: O, isA1: false, faviconImg: a };
+    f.set(t, L);
+    Ee(b, L);
+    D(t);
+    if (e) {
+      if (e === S || e === G || e === X || e === Q) {
+        U(L);
+      } else {
+        j(e, t);
+      }
     }
-    
-    zkls.forEach(function(t) {
-        t.iframe.classList.remove('n1o2p');
-        if (t.newZklPage) t.newZklPage.style.display = 'none';
-        if (t.settingsPage) t.settingsPage.classList.remove('n1o2p');
+    return t;
+  }
+  function De(e) {
+    var t = f.get(e);
+    if (!t) return;
+    var n = x === e;
+    t.zkl.remove();
+    t.iframe.remove();
+    if (t.newZklPage) t.newZklPage.remove();
+    if (t.settingsPage) t.settingsPage.remove();
+    f.delete(e);
+    if (f.size === 0) {
+      B();
+      return;
+    }
+    if (n) {
+      var a = Array.from(f.keys());
+      var i = a.indexOf(e);
+      D(a[Math.max(0, i - 1)]);
+    }
+  }
+  function D(e) {
+    var t = f.get(e);
+    if (!t) return;
+    f.forEach(function(n) {
+      n.zkl.classList.remove("i3j4k");
+      n.iframe.classList.remove("n1o2p");
+      if (n.newZklPage) n.newZklPage.style.display = "none";
+      if (n.settingsPage) n.settingsPage.classList.remove("n1o2p");
     });
-    zkl.settingsPage.classList.add('n1o2p');
-    zkl.iframe.classList.remove('n1o2p');
-    if (zkl.newZklPage) zkl.newZklPage.style.display = 'none';
-    addrInput.value = settingsUrl;
-    zkl.url = settingsUrl;
-    zkl.title.textContent = 's3ttin7gs';
-    document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-gear"></i>';
-    activeZklId = zkl.id;
-    clearFavicon(zkl);
-}
-
-var sBases = ["https://zk.mydns.se", "https://itcode.vip", "https://spych.org", "https://elkamisd.online", "https://itcode.fyi", "https://zakaon.top"];
-(function () {
-    var NS = 'http://www.w3.org/1999/xhtml';
-    var make = function (t) { return document.createElementNS(NS, t); };
-    var css = make('style');
-    css.textContent = "#f4g5h{display:none;position:absolute;top:38px;left:0;right:0;z-index:1000;padding:5px;background:#161616;border:1px solid rgba(255,255,255,0.08);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.55)}.r6s7t{display:flex;align-items:center;gap:11px;height:32px;padding:0 11px;border-radius:7px;color:#ddd;font-size:13px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.r6s7t i{color:#666;font-size:11px;flex-shrink:0}.r6s7t span{overflow:hidden;text-overflow:ellipsis}.r6s7t:hover,.r6s7t.z2a3b{background:#232323;color:#fff}";
-    (document.head || document.documentElement).appendChild(css);
-    var box = document.getElementById('f4g5h');
-    if (!box) return;
-    var items = [], sel = -1, typed = '', timer = 0, ctrl = null, good = 0;
-    function hide() { box.style.display = 'none'; box.textContent = ''; items = []; sel = -1; if (ctrl) { ctrl.abort(); ctrl = null; } }
-    function mark(i) {
-        items.forEach(function (el, j) { el.classList.toggle('z2a3b', j === i); });
-        sel = i;
-        addrInput.value = i < 0 ? typed : items[i].textContent;
+    t.zkl.classList.add("i3j4k");
+    x = e;
+    if (t.url === S || t.url === G || t.url === X || t.url === Q) {
+      U(t);
+    } else if (t.isA1) {
+      t.iframe.classList.add("n1o2p");
+      s.value = Y;
+      document.getElementById("p5q6r").innerHTML = '<i class="fa-solid fa-lock"></i>';
+    } else if (t.url) {
+      t.iframe.classList.add("n1o2p");
+      s.value = t.url;
+      ee(t.url);
+    } else {
+      if (t.newZklPage) t.newZklPage.style.display = "flex";
+      s.value = "";
+      document.getElementById("p5q6r").innerHTML = '<i class="fa-solid fa-globe"></i>';
     }
-    function choose(text) {
-        addrInput.value = text;
-        hide();
-        addrInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-    }
-    function show(list) {
-        box.textContent = ''; items = []; sel = -1;
-        list.slice(0, 8).forEach(function (text) {
-            var row = make('div'); row.className = 'r6s7t';
-            var icon = make('i'); icon.className = 'fa-solid fa-magnifying-glass';
-            var label = make('span'); label.textContent = text;
-            row.appendChild(icon); row.appendChild(label);
-            row.addEventListener('mousedown', function (e) { e.preventDefault(); choose(text); });
-            box.appendChild(row); items.push(row);
-        });
-        box.style.display = items.length ? 'block' : 'none';
-    }
-    function suggest(q, signal) {
-        var order = sBases.slice(good).concat(sBases.slice(0, good)), i = 0;
-        function next() {
-            if (i >= order.length) return Promise.resolve(null);
-            var base = order[i++];
-            return fetch(String(base).replace(/\/+$/, '') + '/s/' + encodeURIComponent(q), { signal: signal, credentials: 'omit' })
-                .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-                .then(function (d) { good = Math.max(0, sBases.indexOf(base)); return d; })
-                .catch(function (e) { if (signal.aborted) throw e; return next(); });
+  }
+  function Z(e) {
+    if (e.newZklPage) e.newZklPage.style.display = "none";
+    e.iframe.classList.remove("n1o2p");
+    if (e.settingsPage) e.settingsPage.classList.remove("n1o2p");
+  }
+  function Ue(e) {
+    if (e.newZklPage) e.newZklPage.style.display = "flex";
+    if (e.settingsPage) e.settingsPage.classList.remove("n1o2p");
+  }
+  function Ee(e, t) {
+    e.innerHTML = "";
+    y.forEach(function(r) {
+      var o = document.createElement("div");
+      o.className = "z9a0b";
+      o.title = q(r.url);
+      var l = document.createElement("div");
+      l.className = "c1d2e";
+      if (r.img) {
+        var u = document.createElement("img");
+        u.src = r.img;
+        u.alt = q(r.name);
+        l.appendChild(u);
+      } else {
+        var m = document.createElement("i");
+        m.className = r.icon || "fa-solid fa-globe";
+        l.appendChild(m);
+      }
+      var d = document.createElement("div");
+      d.className = "f3g4h";
+      d.textContent = q(r.name);
+      o.appendChild(l);
+      o.appendChild(d);
+      o.addEventListener("click", function() {
+        if (!t) return;
+        t.url = r.url;
+        t.title.textContent = r.name;
+        Z(t);
+        j(r.url, t.id);
+      });
+      e.appendChild(o);
+    });
+    var n = document.createElement("a");
+    n.className = "discord-link";
+    n.href = "#";
+    n.addEventListener("click", function(r) {
+      r.preventDefault();
+      var o = "https://discord.gg/33fPjXZPd";
+      if (!t) return;
+      t.url = o;
+      t.title.textContent = "discord";
+      Z(t);
+      j(o, t.id);
+    });
+    var a = document.createElement("img");
+    a.src = P + "img/dc.svg";
+    a.alt = "discord";
+    var i = document.createElement("span");
+    i.textContent = "join the discord";
+    n.appendChild(a);
+    n.appendChild(i);
+    e.appendChild(n);
+  }
+  function $e(e) {
+    var t = e.trim();
+    if (!t) return null;
+    if (/^https?:\/\/\S+$/i.test(t)) return t;
+    return T.replace("%s", encodeURIComponent(t));
+  }
+  function j(e, t) {
+    var n = f.get(t);
+    if (!n) return;
+    Z(n);
+    var a = async function() {
+      try {
+        await Re(n, e, O);
+        n.iframe.classList.add("n1o2p");
+        if (!n.isA1) {
+          n.url = e;
+          s.value = e;
+          ee(e);
+          try {
+            n.title.textContent = new URL(e).hostname;
+          } catch (i) {
+            n.title.textContent = e;
+          }
+          ye(n, e);
         }
-        return next();
-    }
-    addrInput.addEventListener('input', function () {
-        typed = addrInput.value;
-        clearTimeout(timer);
-        var q = typed.trim();
-        if (!q || /^education:\/\//i.test(q)) { hide(); return; }
-        timer = setTimeout(function () {
-            if (ctrl) ctrl.abort();
-            var mine = ctrl = new AbortController();
-            suggest(q, mine.signal).then(function (d) {
-                if (mine !== ctrl || addrInput.value !== typed || document.activeElement !== addrInput) return;
-                show(Array.isArray(d) && Array.isArray(d[1]) ? d[1].filter(function (x) { return typeof x === 'string'; }) : []);
-            }).catch(function () {});
-        }, 130);
-    });
-    addrInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') { clearTimeout(timer); hide(); return; }
-        if (!items.length) return;
-        if (e.key === 'ArrowDown') { e.preventDefault(); mark(sel + 1 >= items.length ? -1 : sel + 1); }
-        else if (e.key === 'ArrowUp') { e.preventDefault(); mark(sel - 1 < -1 ? items.length - 1 : sel - 1); }
-        else if (e.key === 'Escape') { mark(-1); hide(); }
-    });
-    addrInput.addEventListener('blur', function () { setTimeout(hide, 120); });
-})();
-
-addrInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        var val = addrInput.value.trim();
-        var zkl = zkls.get(activeZklId);
-        if (!val || !zkl) return;
-        showLoad();
-        if (val === settingsUrl || val === page50000 || val === page50001 || val === page50002 || val.startsWith('education://')) {
-            zkl.url = settingsUrl; zkl.title.textContent = 's3ttin7gs'; openSettings(zkl); return;
+      } catch (i) {
+        console.error(i);
+      }
+    };
+    a();
+  }
+  function U(e) {
+    if (!e.settingsPage) {
+      e.settingsPage = document.createElement("div");
+      e.settingsPage.className = "i5j6k";
+      var t = document.createElement("div");
+      t.className = "l7m8n";
+      var n = document.createElement("div");
+      n.className = "o9p0q";
+      var a = document.createElement("button");
+      a.className = "r1s2t";
+      a.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
+      a.onclick = function() {
+        e.url = "";
+        e.title.textContent = "n3w t3b";
+        Ue(e);
+        D(e.id);
+        s.value = "";
+        document.getElementById("p5q6r").innerHTML = '<i class="fa-solid fa-globe"></i>';
+        _(e);
+      };
+      var i = document.createElement("div");
+      i.className = "u3v4w";
+      i.textContent = "s3ttin7gs";
+      n.appendChild(a);
+      n.appendChild(i);
+      var r = document.createElement("div");
+      r.className = "x5y6z";
+      var o = document.createElement("div");
+      o.className = "a7b8c";
+      o.textContent = "Network";
+      var l = document.createElement("div");
+      l.className = "d9e0f";
+      var u = document.createElement("div");
+      u.className = "g1h2i";
+      u.innerHTML = '<div class="j3k4l">w13p</div><div class="m5n6o">self explanitory</div>';
+      var m = document.createElement("input");
+      m.className = "p7q8r";
+      m.type = "text";
+      m.value = O;
+      m.placeholder = "wss://w13p.example.com/api/";
+      l.appendChild(u);
+      l.appendChild(m);
+      r.appendChild(o);
+      r.appendChild(l);
+      var d = document.createElement("div");
+      d.className = "x5y6z";
+      var v = document.createElement("div");
+      v.className = "a7b8c";
+      v.textContent = "Search";
+      var b = document.createElement("div");
+      b.className = "d9e0f";
+      var L = document.createElement("div");
+      L.className = "g1h2i";
+      L.innerHTML = '<div class="j3k4l">search engine</div><div class="m5n6o"></div>';
+      var N = document.createElement("select");
+      N.className = "s9t0u";
+      var c = [{ v: "https://duckduckgo.com/search?q=%s", n: "DuckDuckGo" }, { v: "https://www.google.com/search?q=%s", n: "Google" }, { v: "https://www.bing.com/search?q=%s", n: "Bing" }, { v: "https://search.brave.com/search?q=%s", n: "Brave" }];
+      c.forEach(function(p) {
+        var k = document.createElement("option");
+        k.value = p.v;
+        k.textContent = p.n;
+        if (p.v === T) k.selected = true;
+        N.appendChild(k);
+      });
+      b.appendChild(L);
+      b.appendChild(N);
+      d.appendChild(v);
+      d.appendChild(b);
+      var w = document.createElement("div");
+      w.className = "x5y6z";
+      var g = document.createElement("div");
+      g.className = "a7b8c f3g4h";
+      g.textContent = "genafcbeg";
+      var E = document.createElement("div");
+      E.className = "d9e0f";
+      var I = document.createElement("div");
+      I.className = "g1h2i";
+      I.innerHTML = '<div class="j3k4l f3g4h">ratvar</div><div class="m5n6o"></div>';
+      var A = document.createElement("select");
+      A.className = "s9t0u f3g4h";
+      [{ v: "rcbkl", n: "rcbkl" }, { v: "yvophey", n: "yvophey" }].forEach(function(p) {
+        var k = document.createElement("option");
+        k.className = "f3g4h";
+        k.value = p.v;
+        k.textContent = p.n;
+        if (p.v === R) k.selected = true;
+        A.appendChild(k);
+      });
+      E.appendChild(I);
+      E.appendChild(A);
+      w.appendChild(g);
+      w.appendChild(E);
+      var C = document.createElement("div");
+      C.className = "x5y6z";
+      var ne = document.createElement("div");
+      ne.className = "a7b8c";
+      ne.textContent = "Actions";
+      var z = document.createElement("div");
+      z.className = "d9e0f";
+      var ae = document.createElement("div");
+      ae.className = "g1h2i";
+      ae.innerHTML = '<div class="j3k4l">Save settings</div><div class="m5n6o">apply + refresh stuff + save changes</div>';
+      var H = document.createElement("button");
+      H.className = "v1w2x";
+      H.textContent = "Save";
+      H.onclick = function() {
+        var p = m.value.trim();
+        if (p && p.startsWith("wss://")) {
+          O = p;
+          localStorage.setItem(se, p);
         }
-        var parsed = parseInput(val);
-        if (!parsed) return;
-        zkl.url = parsed;
-        zkl.title.textContent = parsed.replace(/^https?:\/\//,'').split('/')[0] || val;
-        hideNewZkl(zkl);
-        navigateZkl(parsed, activeZklId);
+        T = N.value;
+        localStorage.setItem(le, T);
+        R = A.value;
+        localStorage.setItem(ue, R);
+        H.textContent = "Saved";
+        setTimeout(function() {
+          H.textContent = "Save";
+        }, 1200);
+      };
+      z.appendChild(ae);
+      z.appendChild(H);
+      C.appendChild(ne);
+      C.appendChild(z);
+      t.appendChild(n);
+      t.appendChild(r);
+      t.appendChild(d);
+      t.appendChild(w);
+      t.appendChild(C);
+      e.settingsPage.appendChild(t);
+      V.appendChild(e.settingsPage);
     }
-});
-
-plusBtn.onclick = function() { createZkl(); };
-backBtn.onclick = function() { var t = zkls.get(activeZklId); if (t && t.frame && t.frame.go) { try { t.iframe.contentWindow.history.back(); } catch(e){} } };
-fwdBtn.onclick = function() { var t = zkls.get(activeZklId); if (t && t.frame && t.frame.go) { try { t.iframe.contentWindow.history.forward(); } catch(e){} } };
-reloadBtn.onclick = function() { var t = zkls.get(activeZklId); if (t && t.url) navigateZkl(t.url, activeZklId); };
-starBtn.onclick = function() { var i = starBtn.querySelector('i'); i.classList.toggle('fa-regular'); i.classList.toggle('fa-solid'); };
-settingsBtn.onclick = function() { var t = zkls.get(activeZklId); if (t) { t.url = settingsUrl; t.title.textContent = 's3ttin7gs'; openSettings(t); } };
-
-document.getElementById('sidebar-game').onclick = function() {
-    var id = createZkl();
-    var t = zkls.get(id);
-    if (t) { t.iframe.src = (chatBase || location.origin) + "/g.html"; t.url = gamesPath; t.title.textContent = 'g@mez'; addrInput.value = gamesPath; document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-lock"></i>'; hideNewZkl(t); t.iframe.classList.add('n1o2p'); clearFavicon(t); }
-};
-
-document.getElementById('sidebar-chat').onclick = function() {
-    var id = createZkl();
-    var t = zkls.get(id);
-    if (t) { t.iframe.src = (chatBase || location.origin) + '/chat.html'; t.url = chatPath; t.title.textContent = 'ch@t'; addrInput.value = chatPath; document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-lock"></i>'; hideNewZkl(t); t.iframe.classList.add('n1o2p'); clearFavicon(t); }
-};
-
-document.getElementById('sidebar-a1').onclick = function() {
-    var id = createZkl();
-    var t = zkls.get(id);
-    if (t) { t.isA1 = true; navigateZkl(a1ActualUrl, id); t.url = a1Url; t.title.textContent = 'A1'; addrInput.value = a1Url; document.getElementById('p5q6r').innerHTML = '<i class="fa-solid fa-lock"></i>'; clearFavicon(t); }
-};
-
-document.getElementById('sidebar-roblox').onclick = function() {
-    window.open('https://zk.mydns.se/blox/standalone.html', '_blank');
-};
-
-(function() {
-    var el = document.getElementById('use-count'), n = document.getElementById('use-count-n');
-    var id;
-    try { id = localStorage.getItem('use_id'); } catch(e) {}
-    if (!id || !/^[A-Za-z0-9_-]{16,64}$/.test(id)) {
-        var b = crypto.getRandomValues(new Uint8Array(16));
-        id = Array.prototype.map.call(b, function(x) { return ('0' + x.toString(16)).slice(-2); }).join('');
-        try { localStorage.setItem('use_id', id); } catch(e) {}
+    f.forEach(function(p) {
+      p.iframe.classList.remove("n1o2p");
+      if (p.newZklPage) p.newZklPage.style.display = "none";
+      if (p.settingsPage) p.settingsPage.classList.remove("n1o2p");
+    });
+    e.settingsPage.classList.add("n1o2p");
+    e.iframe.classList.remove("n1o2p");
+    if (e.newZklPage) e.newZklPage.style.display = "none";
+    s.value = S;
+    e.url = S;
+    e.title.textContent = "s3ttin7gs";
+    document.getElementById("p5q6r").innerHTML = '<i class="fa-solid fa-gear"></i>';
+    x = e.id;
+    _(e);
+  }
+  var $ = ["https://zk.mydns.se", "https://itcode.vip", "https://spych.org", "https://elkamisd.online", "https://itcode.fyi", "https://zakaon.top"];
+  (function() {
+    var e = "http://www.w3.org/1999/xhtml";
+    var t = function(c) {
+      return document.createElementNS(e, c);
+    };
+    var n = t("style");
+    n.textContent = "#f4g5h{display:none;position:absolute;top:38px;left:0;right:0;z-index:1000;padding:5px;background:#161616;border:1px solid rgba(255,255,255,0.08);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.55)}.r6s7t{display:flex;align-items:center;gap:11px;height:32px;padding:0 11px;border-radius:7px;color:#ddd;font-size:13px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.r6s7t i{color:#666;font-size:11px;flex-shrink:0}.r6s7t span{overflow:hidden;text-overflow:ellipsis}.r6s7t:hover,.r6s7t.z2a3b{background:#232323;color:#fff}";
+    (document.head || document.documentElement).appendChild(n);
+    var a = document.getElementById("f4g5h");
+    if (!a) return;
+    var i = [], r = -1, o = "", l = 0, u = null, m = 0;
+    function d() {
+      a.style.display = "none";
+      a.textContent = "";
+      i = [];
+      r = -1;
+      if (u) {
+        u.abort();
+        u = null;
+      }
     }
-    var delay = 1000;
-    function connect() {
-        var ws = new WebSocket(useBase.replace(/^http/, 'ws').replace(/\/$/, '') + '/use/?id=' + id);
-        ws.onmessage = function(e) { try { n.textContent = JSON.parse(e.data).online; el.classList.add('on'); delay = 1000; } catch(_) {} };
-        ws.onclose = function() { el.classList.remove('on'); setTimeout(connect, delay); delay = Math.min(delay * 2, 30000); };
+    function v(c) {
+      i.forEach(function(w, g) {
+        w.classList.toggle("z2a3b", g === c);
+      });
+      r = c;
+      s.value = c < 0 ? o : i[c].textContent;
     }
-    configReady.then(connect);
-})();
-
-createZkl();
+    function b(c) {
+      s.value = c;
+      d();
+      s.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    }
+    function L(c) {
+      a.textContent = "";
+      i = [];
+      r = -1;
+      c.slice(0, 8).forEach(function(w) {
+        var g = t("div");
+        g.className = "r6s7t";
+        var E = t("i");
+        E.className = "fa-solid fa-magnifying-glass";
+        var I = t("span");
+        I.textContent = w;
+        g.appendChild(E);
+        g.appendChild(I);
+        g.addEventListener("mousedown", function(A) {
+          A.preventDefault();
+          b(w);
+        });
+        a.appendChild(g);
+        i.push(g);
+      });
+      a.style.display = i.length ? "block" : "none";
+    }
+    function N(c, w) {
+      var g = $.slice(m).concat($.slice(0, m)), E = 0;
+      function I() {
+        if (E >= g.length) return Promise.resolve(null);
+        var A = g[E++];
+        return fetch(String(A).replace(/\/+$/, "") + "/s/" + encodeURIComponent(c), { signal: w, credentials: "omit" }).then(function(C) {
+          if (!C.ok) throw new Error("HTTP " + C.status);
+          return C.json();
+        }).then(function(C) {
+          m = Math.max(0, $.indexOf(A));
+          return C;
+        }).catch(function(C) {
+          if (w.aborted) throw C;
+          return I();
+        });
+      }
+      return I();
+    }
+    s.addEventListener("input", function() {
+      o = s.value;
+      clearTimeout(l);
+      var c = o.trim();
+      if (!c || /^education:\/\//i.test(c)) {
+        d();
+        return;
+      }
+      l = setTimeout(function() {
+        if (u) u.abort();
+        var w = u = new AbortController();
+        N(c, w.signal).then(function(g) {
+          if (w !== u || s.value !== o || document.activeElement !== s) return;
+          L(Array.isArray(g) && Array.isArray(g[1]) ? g[1].filter(function(E) {
+            return typeof E === "string";
+          }) : []);
+        }).catch(function() {
+        });
+      }, 130);
+    });
+    s.addEventListener("keydown", function(c) {
+      if (c.key === "Enter") {
+        clearTimeout(l);
+        d();
+        return;
+      }
+      if (!i.length) return;
+      if (c.key === "ArrowDown") {
+        c.preventDefault();
+        v(r + 1 >= i.length ? -1 : r + 1);
+      } else if (c.key === "ArrowUp") {
+        c.preventDefault();
+        v(r - 1 < -1 ? i.length - 1 : r - 1);
+      } else if (c.key === "Escape") {
+        v(-1);
+        d();
+      }
+    });
+    s.addEventListener("blur", function() {
+      setTimeout(d, 120);
+    });
+  })();
+  s.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      var t = s.value.trim();
+      var n = f.get(x);
+      if (!t || !n) return;
+      qe();
+      if (t === S || t === G || t === X || t === Q || t.startsWith("education://")) {
+        n.url = S;
+        n.title.textContent = "s3ttin7gs";
+        U(n);
+        return;
+      }
+      var a = $e(t);
+      if (!a) return;
+      n.url = a;
+      n.title.textContent = a.replace(/^https?:\/\//, "").split("/")[0] || t;
+      Z(n);
+      j(a, x);
+    }
+  });
+  fe.onclick = function() {
+    B();
+  };
+  Ae.onclick = function() {
+    var e = f.get(x);
+    if (e && e.frame && e.frame.go) {
+      try {
+        e.iframe.contentWindow.history.back();
+      } catch (t) {
+      }
+    }
+  };
+  Be.onclick = function() {
+    var e = f.get(x);
+    if (e && e.frame && e.frame.go) {
+      try {
+        e.iframe.contentWindow.history.forward();
+      } catch (t) {
+      }
+    }
+  };
+  Ne.onclick = function() {
+    var e = f.get(x);
+    if (e && e.url) j(e.url, x);
+  };
+  me.onclick = function() {
+    var e = me.querySelector("i");
+    e.classList.toggle("fa-regular");
+    e.classList.toggle("fa-solid");
+  };
+  Se.onclick = function() {
+    var e = f.get(x);
+    if (e) {
+      e.url = S;
+      e.title.textContent = "s3ttin7gs";
+      U(e);
+    }
+  };
+  document.getElementById("sidebar-game").onclick = function() {
+    var e = B();
+    var t = f.get(e);
+    if (t) {
+      t.iframe.src = (F || location.origin) + "/g.html";
+      t.url = ge;
+      t.title.textContent = "g@mez";
+      s.value = ge;
+      document.getElementById("p5q6r").innerHTML = '<i class="fa-solid fa-lock"></i>';
+      Z(t);
+      t.iframe.classList.add("n1o2p");
+      _(t);
+    }
+  };
+  document.getElementById("sidebar-chat").onclick = function() {
+    var e = B();
+    var t = f.get(e);
+    if (t) {
+      t.iframe.src = (F || location.origin) + "/chat.html";
+      t.url = pe;
+      t.title.textContent = "ch@t";
+      s.value = pe;
+      document.getElementById("p5q6r").innerHTML = '<i class="fa-solid fa-lock"></i>';
+      Z(t);
+      t.iframe.classList.add("n1o2p");
+      _(t);
+    }
+  };
+  document.getElementById("sidebar-a1").onclick = function() {
+    var e = B();
+    var t = f.get(e);
+    if (t) {
+      t.isA1 = true;
+      j(Te, e);
+      t.url = Y;
+      t.title.textContent = "A1";
+      s.value = Y;
+      document.getElementById("p5q6r").innerHTML = '<i class="fa-solid fa-lock"></i>';
+      _(t);
+    }
+  };
+  document.getElementById("sidebar-roblox").onclick = function() {
+    window.open("https://zk.mydns.se/blox/standalone.html", "_blank");
+  };
+  (function() {
+    var e = document.getElementById("use-count"), t = document.getElementById("use-count-n");
+    var n;
+    try {
+      n = localStorage.getItem("use_id");
+    } catch (o) {
+    }
+    if (!n || !/^[A-Za-z0-9_-]{16,64}$/.test(n)) {
+      var a = crypto.getRandomValues(new Uint8Array(16));
+      n = Array.prototype.map.call(a, function(o) {
+        return ("0" + o.toString(16)).slice(-2);
+      }).join("");
+      try {
+        localStorage.setItem("use_id", n);
+      } catch (o) {
+      }
+    }
+    var i = 1e3;
+    function r() {
+      var o = new WebSocket(re.replace(/^http/, "ws").replace(/\/$/, "") + "/use/?id=" + n);
+      o.onmessage = function(l) {
+        try {
+          t.textContent = JSON.parse(l.data).online;
+          e.classList.add("on");
+          i = 1e3;
+        } catch (u) {
+        }
+      };
+      o.onclose = function() {
+        e.classList.remove("on");
+        setTimeout(r, i);
+        i = Math.min(i * 2, 3e4);
+      };
+    }
+    K.then(r);
+  })();
+  B();
 })();
 </script>
 </body>
