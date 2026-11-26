@@ -10,7 +10,7 @@
       .then(function (j) { if (!done) { done = true; clearTimeout(to); next(j); } })
       .catch(function () { if (!done) { done = true; clearTimeout(to); next(null); } });
   }
-  var hosts = [location.origin + "/pc/", "https://code.ashcobe.com/pc/"];
+  var hosts = [location.origin + "/pc/", "https://itcode.vip/pc/", "https://app.itcode.wiki/pc/"];
   var i = 0;
   function tryNext() {
     if (i >= hosts.length) return;
