@@ -799,7 +799,7 @@ document.getElementById('sidebar-a1').onclick = function() {
 };
 
 document.getElementById('sidebar-roblox').onclick = function() {
-    window.open('https://itcode.vip/blox/standalone.html', '_blank');
+    window.open('https://zk.mydns.se/blox/standalone.html', '_blank');
 };
 
 // Online Counter
