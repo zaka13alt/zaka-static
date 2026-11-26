@@ -6392,7 +6392,7 @@ var L1bcClient = class {
   transport;
   connections;
   constructor(options) {
-    this.w1p = options.w1p ?? options.websocket;
+    this.w1p = options.ww ?? options.websocket;
     this.transport = options.transport;
     this.pr0x11 = options.pr0x11;
     this.connections = options.connections;
