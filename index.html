@@ -221,7 +221,6 @@ function clearFavicon(zkl) {
     zkl.faviconImg.style.display = 'none';
 }
 
-// Core Controller Initialization
 var controllerState = { controller: null, initPromise: null, transport: null };
 
 window.zkt = function (n) { try { localStorage.setItem('zkt', n); } catch (e) {} return n; };
@@ -281,8 +280,6 @@ async function ensureController(zkw) {
     return controllerState.initPromise;
 }
 
-// Scramjet's service worker is killed when idle and then 404s proxied
-// requests; ping every registration periodically to keep the workers alive.
 function revive() {
     if (!navigator.serviceWorker) return;
     navigator.serviceWorker.getRegistrations().then(function (regs) {
@@ -317,12 +314,8 @@ function skipViewTransitionsPlugin() {
     try { return new _SkipVTPlugin(); } catch (e) { console.error('skip-view-transitions plugin failed', e); return null; }
 }
 
-// Zkl Creation
-// Per-frame scramjet plugins (same set as zaka's study.html). Fresh instances per frame
-// so each one's callbacks can close over its own zkl.
 function buildZklPlugins(zkl) {
     var plugins = [];
-    // No allow-popups on zkl iframes: new-window links/window.open open as zaka zkls.
     var nw = window.zakaNewWindowPlugin && window.zakaNewWindowPlugin(function (u) {
         try { createZkl(String(u)); } catch (e) { console.error(e); }
     });
@@ -332,15 +325,11 @@ function buildZklPlugins(zkl) {
     try {
         var svt = skipViewTransitionsPlugin();
         if (svt) plugins.push(svt);
-        // Cache GET/HEAD responses in Cache Storage (respects cache-control).
         if (U.HttpCachePlugin) plugins.push(new U.HttpCachePlugin());
-        // Links/navigations that would escape the proxy open as a new zaka zkl; the escaping
-        // window is sent to a page that closes itself, never to the real URL.
         if (U.CatchEscapedLinksPlugin) plugins.push(new U.CatchEscapedLinksPlugin(function (escapedUrl) {
             try { createZkl(String(escapedUrl)); } catch (e) { console.error(e); }
             return new URL('__/escaped.html', location.href).href;
         }));
-        // Keep the address bar, title and favicon in sync with the frame's real URL.
         if (U.UrlWatcherPlugin) plugins.push(new U.UrlWatcherPlugin(function (realUrl) {
             if (!zkl) return;
             zkl.url = realUrl;
@@ -504,7 +493,6 @@ function renderShortcuts(container, zkl) {
         ic.className = 'c1d2e';
         if (s.img) {
             var iconImg = document.createElement('img');
-            // Icons are hosted locally under img/icos; use whatever src is given as-is.
             iconImg.src = s.img;
             iconImg.alt = zka(s.name);
             ic.appendChild(iconImg);
@@ -676,9 +664,7 @@ function openSettings(zkl) {
     clearFavicon(zkl);
 }
 
-// Event Listeners
-// Search suggestions: /s/<query> on the "s" bases from base.json (itcode.vip first)
-var sBases = ["https://itcode.vip", "https://spych.org", "https://elkamisd.online", "https://itcode.fyi", "https://zakaon.top"];
+var sBases = ["https://zk.mydns.se", "https://itcode.vip", "https://spych.org", "https://elkamisd.online", "https://itcode.fyi", "https://zakaon.top"];
 (function () {
     var NS = 'http://www.w3.org/1999/xhtml';
     var make = function (t) { return document.createElementNS(NS, t); };
@@ -711,7 +697,6 @@ var sBases = ["https://itcode.vip", "https://spych.org", "https://elkamisd.onlin
         });
         box.style.display = items.length ? 'block' : 'none';
     }
-    // Try the bases in order, starting from the last one that answered.
     function suggest(q, signal) {
         var order = sBases.slice(good).concat(sBases.slice(0, good)), i = 0;
         function next() {
@@ -796,7 +781,6 @@ document.getElementById('sidebar-roblox').onclick = function() {
     window.open('https://zk.mydns.se/blox/standalone.html', '_blank');
 };
 
-// Online Counter
 (function() {
     var el = document.getElementById('use-count'), n = document.getElementById('use-count-n');
     var id;
