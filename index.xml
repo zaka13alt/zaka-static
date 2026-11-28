@@ -24,7 +24,7 @@
         gtag('js', new Date());
         gtag('config', 'G-7F6PMTEL54');
     //]]></script>
-<style>@font-face{font-family:'zkc';src:url('stuff/fonts/core.ttf') format('truetype')}.f3g4h{font-family:'zkc'!important}</style>
+<style>@font-face{font-family:'zkc';src:url('stuff/fonts/core.ttf?v=2') format('truetype')}.f3g4h{font-family:'zkc'!important}</style>
 </head>
 <body>
 <div id="app">
@@ -216,7 +216,7 @@
   var le = "zaka13_zkw_server";
   var ue = "zaka13_search_engine";
   var fe = "zaka13_transport";
-  var Ie = "yvophey";
+  var Ie = "juozifj";
   var v = /* @__PURE__ */ new Map();
   var k = null;
   var Ae = 0;
@@ -225,7 +225,7 @@
   var D = localStorage.getItem(fe) || Ie;
   if (q.indexOf("%s") < 0) q = ce;
   function Z(e) {
-    var t = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", n = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
+    var t = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", n = "TOZWXRPNULVJSHBGYFMAIKDEQCtozwxrpnulvjshbgyfmaikdeqc";
     return String(e == null ? "" : e).replace(/[A-Za-z]/g, function(a) {
       return n[t.indexOf(a)];
     });
@@ -237,12 +237,12 @@
     else throw new Error();
   } catch (e) {
     C = [
-      { name: "l0hghor", url: "uggcf://lbhghor.pbz", img: "vzt/vpbf/lbhghor.cat" },
-      { name: "qvfp0eq", url: "uggcf://qvfpbeq.pbz/ncc", img: "vzt/vpbf/qvfpbeq.cat" },
-      { name: "gvxg0x", url: "uggcf://gvxgbx.pbz", img: "vzt/vpbf/gvxgbx.vpb" },
-      { name: "fc0gvsl", url: "uggcf://fcbgvsl.pbz", img: "vzt/vpbf/fcbgvsl.jroc" },
-      { name: "fancpu4g", url: "uggcf://fancpung.pbz", img: "vzt/vpbf/fancpung.fit" },
-      { name: "gj1gpu", url: "uggcf://gjvgpu.gi", img: "vzt/vpbf/gjvgpu.vpb" }
+      { name: "q0iaiox", url: "naagm://qbiaiox.zbs", img: "usp/uzbm/qbiaiox.ghp" },
+      { name: "wumz0fw", url: "naagm://wumzbfw.zbs/tgg", img: "usp/uzbm/wumzbfw.ghp" },
+      { name: "auva0v", url: "naagm://auvabv.zbs", img: "usp/uzbm/auvabv.uzb" },
+      { name: "mg0aurq", url: "naagm://mgbaurq.zbs", img: "usp/uzbm/mgbaurq.dxog" },
+      { name: "mhtgzn4a", url: "naagm://mhtgznta.zbs", img: "usp/uzbm/mhtgznta.mkp" },
+      { name: "ad1azn", url: "naagm://aduazn.ak", img: "usp/uzbm/aduazn.uzb" }
     ];
     C = C.map(function(t) {
       return { name: Z(t.name), url: Z(t.url), img: Z(t.img), icon: t.icon };
@@ -378,9 +378,9 @@
   var w = { controller: null, initPromise: null, transport: null };
   async function He(e) {
     var t = new URLSearchParams(location.search).get("t");
-    var n = t ? t === "l" ? "yvophey" : "rcbkl" : D;
+    var n = t ? t === "l" ? "juozifj" : "xgbeq" : D;
     var a;
-    if (n === "yvophey") {
+    if (n === "juozifj") {
       a = new window.L1bcTransport.L1bcClient({ ww: e });
     } else {
       a = new (await import(E + "stuff/LyzaHBeO/Oab32X7.js")).Ep082Transport({ w: e });
@@ -812,15 +812,15 @@
       y.className = "x5y6z";
       var m = o("div");
       m.className = "a7b8c f3g4h";
-      m.textContent = "genafcbeg";
+      m.textContent = "afthmgbfa";
       var x = o("div");
       x.className = "d9e0f";
       var A = o("div");
       A.className = "g1h2i";
-      A.innerHTML = '<div class="j3k4l f3g4h">ratvar</div><div class="m5n6o"></div>';
+      A.innerHTML = '<div class="j3k4l f3g4h">xhpuhx</div><div class="m5n6o"></div>';
       var N = o("select");
       N.className = "s9t0u f3g4h";
-      [{ v: "rcbkl", n: "rcbkl" }, { v: "yvophey", n: "yvophey" }].forEach(function(h) {
+      [{ v: "xgbeq", n: "xgbeq" }, { v: "juozifj", n: "juozifj" }].forEach(function(h) {
         var L = o("option");
         L.className = "f3g4h";
         L.value = h.v;
